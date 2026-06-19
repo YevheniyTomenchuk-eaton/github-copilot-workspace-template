@@ -13,7 +13,7 @@ nav_order: 4
 
 ---
 
-An **agent** is a whole **chat mode** built for one kind of work. It has its own system instructions, its own allowed tools, and often a preferred model. You pick it from the **mode menu** on the chat control bar (see [Agents and modes](../agents-and-modes.md)). Picking an agent is like choosing the right specialist for the job — it already knows our conventions.
+An **agent** is a whole **chat mode** built for one kind of work. It has its own system instructions and its own allowed tools. You pick it from the **mode menu** on the chat control bar (see [Agents and modes](../agents-and-modes.md)). Picking an agent is like choosing the right specialist for the job — it already knows our conventions.
 
 ```yaml
 ---
@@ -21,7 +21,6 @@ name: general
 description: "General-purpose assistant with full awareness of this
 repository's structure and conventions. Use for any task — authoring,
 research, or running the workspace prompts."
-model: [claude-opus-4.6, claude-sonnet-4]
 ---
 # General Agent
 You help with any task in this repository, following its conventions…
@@ -33,10 +32,11 @@ You help with any task in this repository, following its conventions…
 
 | Property | Job |
 |----------|-----|
-| **`name`** | What appears in the mode menu |
+| **`name`** | What appears in the mode menu — matches the agent's filename |
 | **`description`** | What the agent specializes in (also used when one agent calls another) |
-| **`model`** | Preferred model(s) for this work |
 | **body** | The agent's personality, rules, and workflow |
+
+> 💡 Agent files **don't pin a model** — you pick the model in chat when you run the agent, so it always uses whatever's best and available.
 
 ---
 

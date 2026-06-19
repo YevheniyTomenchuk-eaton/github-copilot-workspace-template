@@ -4,11 +4,22 @@ applyTo: ".github/agents/**"
 
 # Authoring Agent Files — AI Instructions
 
-Rules for creating and editing custom agent definitions (`{name}.agent.md`) under `.github/agents/`.
+Rules for creating and editing custom agent definitions (`{dotted-name}.agent.md`) under `.github/agents/`.
 The shared naming, encoding, and **Script it or template it** rules live in
 [`.github/copilot-instructions.md`](../../../copilot-instructions.md) — this file only adds the
 agent-specific delta. The VS Code `agent-customization` skill is the general authority on the file
 format; read it when in doubt.
+
+## Naming — Dot-Path Mirroring (Flat Folder)
+
+An agent's filename **encodes the project folder it operates on** as a dot-path, exactly like
+prompts, templates, and hooks — but the file sits **flat** in `.github/agents/`, never in nested
+subfolders. An agent for `toolkit/dev/` is `toolkit.dev.agent.md`; a code-review variant adds one
+trailing descriptor segment, `toolkit.dev.cr.agent.md`.
+
+**Repo-wide exception:** an agent that genuinely spans the whole repository — not tied to a single
+project folder — uses a simple name with no dot-path (e.g. `general.agent.md`). Reach for this only
+when the agent truly has no home folder, never as an escape hatch to avoid the dot-path.
 
 ## Frontmatter
 
@@ -16,18 +27,18 @@ Every agent file starts with a YAML frontmatter block:
 
 ```yaml
 ---
-name: researcher
-description: "Research assistant. Gathers information from the web and the workspace, summarizes findings, and drafts documents — read-only, never edits code."
-model: [claude-opus-4.6, claude-sonnet-4]
+name: general
+description: "General-purpose assistant aware of this workspace's conventions. Use for any task: authoring, research, or running the workspace prompts."
 ---
 ```
 
-- **`name`** (required) — the agent identifier used to invoke it. Lowercase kebab-case, must match
-  the file name (`{name}.agent.md`).
+- **`name`** (required) — the agent identifier used to invoke it. It **must exactly match the
+  filename stem** (the full dotted name for a folder-scoped agent, or the simple name for a
+  repo-wide one). Each dot-separated segment is lowercase kebab-case.
 - **`description`** (required) — one or two sentences on the agent's purpose and scope. Surfaced in
   the agent picker and used for routing.
-- **`model`** (required) — an ordered array of model ids; the first available is used, the rest are
-  fallbacks.
+- **Never add a `model` key.** The model is chosen by the person running the agent; pinning models
+  in the file makes them go stale and greys out the agent when those models are unavailable.
 
 ## Body
 

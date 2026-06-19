@@ -68,7 +68,7 @@ There are **seven** kinds of customization file. This page is the **map** — on
 
 **3️⃣ Skills** are packets of domain knowledge (a folder with a `SKILL.md`). The AI reads only the short **`description`** until your task matches, then loads the full detail on demand. → [deep dive](customization-files/skills.md)
 
-**4️⃣ Agents** are whole **chat modes** — own instructions, own tools, own preferred model — picked from the mode menu. The `general` agent is the ready-made specialist that ships with this template. → [deep dive](customization-files/agents.md)
+**4️⃣ Agents** are whole **chat modes** — own instructions, own tools, own skills — picked from the mode menu. The `general` agent is the ready-made specialist that ships with this template. → [deep dive](customization-files/agents.md)
 
 **5️⃣ Hooks** are automations tied to a **moment** — *before* a tool runs, *after* a file is edited, *when* a session starts. Unlike an instruction, a hook runs your own code and can **enforce** an outcome. → [deep dive](customization-files/hooks.md)
 

@@ -1,7 +1,6 @@
 ---
 name: general
 description: "General-purpose assistant aware of this workspace's conventions. Use for any task: writing content, research, terminal commands, web lookups — while following the repository's structure and rules."
-model: [claude-opus-4.6, claude-sonnet-4]
 ---
 
 # General Assistant

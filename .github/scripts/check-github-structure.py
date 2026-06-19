@@ -18,6 +18,8 @@ Checks performed:
   - hook-unknown-event            : hook references an unknown event name
   - agent-missing-name            : agent file missing 'name' frontmatter
   - agent-missing-description     : agent file missing 'description' frontmatter
+  - agent-name-mismatch           : agent 'name' != filename stem (dotted folder path)
+  - agent-has-model               : agent file sets a forbidden 'model' key
   - leading-fence-wrapper         : file starts with a code fence (```prompt,
                                     ````instructions, …) that wraps the whole
                                     file and hides its YAML frontmatter
@@ -903,11 +905,25 @@ def check_agents(repo_root: str, delta_files: set[str] | None = None) -> list[tu
                 "agent-missing-name",
                 "Missing 'name' in YAML front matter"
             ))
+        elif fm["name"].strip().strip('"').strip("'") != stem:
+            errors.append((
+                f".github/agents/{rel_norm}",
+                "agent-name-mismatch",
+                f"'name: {fm['name']}' must equal the filename stem '{stem}' "
+                f"(dotted folder path the agent operates on, e.g. 'toolkit.dev.cr')"
+            ))
         if "description" not in fm:
             errors.append((
                 f".github/agents/{rel_norm}",
                 "agent-missing-description",
                 "Missing 'description' in YAML front matter"
+            ))
+        if "model" in fm:
+            errors.append((
+                f".github/agents/{rel_norm}",
+                "agent-has-model",
+                "Agent files must not set a 'model' key — the model is chosen "
+                "by the person running the agent"
             ))
 
     return errors
