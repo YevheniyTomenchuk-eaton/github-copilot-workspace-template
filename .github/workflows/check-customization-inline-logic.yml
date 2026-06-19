@@ -1,0 +1,81 @@
+name: Check Customization Inline Logic
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/prompts/**"
+      - ".github/instructions/**"
+      - ".github/agents/**"
+      - ".github/workflows/check-customization-inline-logic.yml"
+      - ".github/scripts/check-customization-inline-logic.py"
+  workflow_dispatch:
+
+jobs:
+  check-inline-logic:
+    name: "Customization Inline-Logic Validation"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Smoke-test checker is runnable
+        run: |
+          python3 -m py_compile .github/scripts/check-customization-inline-logic.py
+
+      - name: Detect changed files
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+            # First push / force-push edge cases: fall back to the previous commit.
+            if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+              BASE="$(git rev-parse "$HEAD~1" 2>/dev/null || echo "$HEAD")"
+            fi
+          else
+            # workflow_dispatch: manual, opt-in full audit of the whole tree.
+            echo "Manual dispatch — running full scan."
+            echo "scan_mode=full" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Delta-only enforcement: scan only the customization files that
+          # changed between BASE and HEAD. Pre-existing inline-logic debt is
+          # grandfathered; the checker guards new and modified files only.
+          FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- \
+            '.github/prompts/' '.github/instructions/' '.github/agents/' \
+            | grep -E '\.md$' || true)
+
+          if [ -z "$FILES" ]; then
+            echo "No relevant customization files changed."
+            echo "scan_mode=none" >> "$GITHUB_OUTPUT"
+          else
+            COUNT=$(echo "$FILES" | wc -l)
+            echo "Delta scan — $COUNT changed file(s)."
+            echo "$FILES" > /tmp/changed_files.txt
+            echo "scan_mode=delta" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate (delta — PR / push)
+        if: steps.changed.outputs.scan_mode == 'delta'
+        run: |
+          python3 .github/scripts/check-customization-inline-logic.py --stdin < /tmp/changed_files.txt
+
+      - name: Validate (full — manual dispatch)
+        if: steps.changed.outputs.scan_mode == 'full'
+        run: |
+          python3 .github/scripts/check-customization-inline-logic.py .
+
+      - name: No relevant changes
+        if: steps.changed.outputs.scan_mode == 'none'
+        run: echo "No customization files changed — nothing to validate."

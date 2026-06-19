@@ -1,0 +1,18 @@
+{
+  "title": "Document title",
+  "sections": [
+    {
+      "heading": "First section",
+      "paragraphs": [
+        "First paragraph.",
+        "Second paragraph."
+      ]
+    },
+    {
+      "heading": "Second section",
+      "paragraphs": [
+        "Another paragraph."
+      ]
+    }
+  ]
+}

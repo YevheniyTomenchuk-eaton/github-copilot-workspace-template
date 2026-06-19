@@ -1,0 +1,19 @@
+{
+  "title": "Deck title",
+  "subtitle": "Optional subtitle",
+  "slides": [
+    {
+      "title": "First slide",
+      "bullets": [
+        "First point",
+        "Second point"
+      ]
+    },
+    {
+      "title": "Second slide",
+      "bullets": [
+        "Another point"
+      ]
+    }
+  ]
+}

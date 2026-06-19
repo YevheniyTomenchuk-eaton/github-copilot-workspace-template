@@ -1,0 +1,49 @@
+# Jekyll / GitHub Pages
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+_build_log.txt
+Gemfile.lock
+Gemfile.local.lock
+
+# Ephemeral helper scripts dropped at repo root by AI agents
+/temp_*.ps1
+
+# Local build performance overrides (not for remote)
+_includes/css/activation.scss.liquid
+_layouts/vendor/compress.html
+assets/js/zzzz-search-data.json
+assets/css/just-the-docs-dark.scss
+assets/css/just-the-docs-default.scss
+assets/css/just-the-docs-head-nav.css
+assets/css/just-the-docs-light.scss
+assets/js/just-the-docs.js
+_plugins/
+
+# Auto-downloaded tools
+.tools/
+
+# Toolkit — generated Office documents (only README.md files are tracked)
+toolkit/email/*.eml
+toolkit/presentation/*.pptx
+toolkit/excel/*.xlsx
+toolkit/word/*.docx
+
+# Scratch files for AI tool calls (gh GraphQL queries, response dumps)
+*.gql
+threads*.json
+
+# Root-level scratch logs and scripts (must never be committed to repo root)
+/clone.log
+/npm-install.log
+/execute-tasks.ps1
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Node.js build artifacts anywhere in the repo
+**/node_modules/
+**/npm-debug.log*
+**/.npm/

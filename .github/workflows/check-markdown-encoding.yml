@@ -1,0 +1,94 @@
+name: Check Markdown Encoding
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+      - ".github/workflows/check-markdown-encoding.yml"
+      - ".gitattributes"
+  workflow_dispatch:
+
+jobs:
+  check-encoding:
+    name: UTF-8 (no BOM) + CRLF
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Get Markdown files to check
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+            FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- '*.md' || true)
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            HEAD="${{ github.sha }}"
+            BASE="${{ github.event.before }}"
+            if [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+              BASE=$(git rev-list --max-parents=0 HEAD)
+            fi
+            FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- '*.md' || true)
+          else
+            FILES=$(git ls-files '*.md')
+          fi
+
+          if [ -z "$FILES" ]; then
+            echo "No Markdown files to check."
+            echo "has_files=false" >> "$GITHUB_OUTPUT"
+          else
+            COUNT=$(echo "$FILES" | wc -l)
+            echo "Checking $COUNT Markdown file(s)."
+            echo "$FILES" > /tmp/md_files.txt
+            echo "has_files=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check encoding and line endings
+        if: steps.changed.outputs.has_files == 'true'
+        run: |
+          ERRORS=0
+
+          while IFS= read -r FILE; do
+            if [ ! -f "$FILE" ]; then
+              continue
+            fi
+
+            # UTF-8 BOM (EF BB BF)
+            if head -c 3 "$FILE" | xxd -p | grep -q "efbbbf"; then
+              echo "::error file=${FILE}::${FILE} — UTF-8 BOM detected. File must be UTF-8 without BOM."
+              ERRORS=$((ERRORS + 1))
+            fi
+
+            # Valid UTF-8 encoding
+            if ! iconv -f UTF-8 -t UTF-8 "$FILE" > /dev/null 2>&1; then
+              echo "::error file=${FILE}::${FILE} — Invalid encoding. File must be UTF-8."
+              ERRORS=$((ERRORS + 1))
+            fi
+
+            # CRLF line endings
+            if [ -s "$FILE" ]; then
+              TOTAL=$(wc -l < "$FILE")
+              CRLF=$(grep -cP '\r$' "$FILE" 2>/dev/null) || CRLF=0
+              if [ "$TOTAL" -gt "$CRLF" ]; then
+                echo "::error file=${FILE}::${FILE} — LF line endings detected. File must use CRLF."
+                ERRORS=$((ERRORS + 1))
+              fi
+            fi
+
+          done < /tmp/md_files.txt
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo ""
+            echo "Found $ERRORS encoding/line-ending issue(s). See annotations above."
+            exit 1
+          else
+            echo "All Markdown files passed: UTF-8 (no BOM), CRLF line endings."
+          fi

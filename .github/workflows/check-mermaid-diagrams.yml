@@ -1,0 +1,66 @@
+name: Check Mermaid Diagrams
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+      - ".github/workflows/check-mermaid-diagrams.yml"
+      - ".github/scripts/check-mermaid-diagrams.py"
+  workflow_dispatch:
+
+jobs:
+  check-diagrams:
+    name: Mermaid Diagram Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Get Markdown files to check
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+            FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- '*.md' || true)
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            HEAD="${{ github.sha }}"
+            BASE="${{ github.event.before }}"
+            if [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
+              BASE=$(git rev-list --max-parents=0 HEAD)
+            fi
+            FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- '*.md' || true)
+          else
+            # workflow_dispatch — scan all tracked .md files
+            FILES=""
+          fi
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Full scan mode — all tracked .md files."
+            echo "scan_mode=full" >> "$GITHUB_OUTPUT"
+          elif [ -z "$FILES" ]; then
+            echo "No Markdown files changed."
+            echo "scan_mode=none" >> "$GITHUB_OUTPUT"
+          else
+            COUNT=$(echo "$FILES" | wc -l)
+            echo "Checking $COUNT changed Markdown file(s)."
+            echo "$FILES" > /tmp/md_files.txt
+            echo "scan_mode=delta" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate diagrams (delta)
+        if: steps.changed.outputs.scan_mode == 'delta'
+        run: |
+          python3 .github/scripts/check-mermaid-diagrams.py --stdin < /tmp/md_files.txt
+
+      - name: Validate diagrams (full)
+        if: steps.changed.outputs.scan_mode == 'full'
+        run: |
+          python3 .github/scripts/check-mermaid-diagrams.py .

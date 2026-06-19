@@ -1,0 +1,106 @@
+/* Diagram viewer wrapper */
+.diagram-viewer {
+  position: relative;
+
+  &:hover .diagram-fullscreen-btn {
+    opacity: 1;
+  }
+}
+
+/* Mermaid diagram light background — ensures visibility in both light and dark themes.
+   Mermaid's default theme uses dark text (#333) for axis labels, ER diagram attributes,
+   subgraph titles, and grid lines. Without a defined background, these are invisible
+   on dark page backgrounds. Diagram types with %%{init}%% blocks (gantt, timeline,
+   sequence, xychart) control their own colors but still benefit from this fallback. */
+.main-content pre:has(> code.language-mermaid) {
+  background-color: #f8f9fa;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Default inline view — responsive, no pan/zoom */
+.main-content code.language-mermaid {
+  display: block;
+}
+
+/* Fullscreen button — appears on hover */
+.diagram-fullscreen-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  opacity: 0.4;
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #57606a;
+  font-size: 13px;
+  font-family: inherit;
+  line-height: 1;
+  transition: opacity 0.2s, background 0.15s, color 0.15s;
+
+  &:hover {
+    background: #f6f8fa;
+    color: #24292f;
+    border-color: #afb8c1;
+  }
+
+  svg {
+    pointer-events: none;
+  }
+}
+
+/* Fullscreen-active state — svg-pan-zoom is running */
+pre.svg-pan-zoom-enabled {
+  overflow: hidden !important;
+  background: #fff;
+  cursor: grab;
+  margin: 0;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  code.language-mermaid {
+    overflow: visible;
+    padding: 0;
+  }
+}
+
+/* Fullscreen — native Fullscreen API */
+.diagram-viewer:fullscreen {
+  background: #fff;
+
+  pre.svg-pan-zoom-enabled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+
+    code.language-mermaid {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .diagram-fullscreen-btn {
+    opacity: 1;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+  }
+}

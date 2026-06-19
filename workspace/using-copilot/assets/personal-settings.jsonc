@@ -1,0 +1,64 @@
+// ============================================================================
+// Example Copilot-relevant VS Code User settings.
+//
+// A complete, working set you can use directly — copy it as-is, or cherry-pick
+// the lines you want and build your own on top.
+//
+// Paste into YOUR User settings.json (these live on YOUR machine — the repo
+// cannot set them for you):
+//   View menu  ->  Command Palette  ->  "Preferences: Open User Settings (JSON)"
+// ============================================================================
+{
+  // --- The star setting -----------------------------------------------------
+  // Never stop early to ask "Continue?". A huge number = effectively unlimited
+  // steps per task, so the agent finishes the whole job in one go.
+  "chat.agent.maxRequests": 1000000000,
+
+  // --- Inline suggestions ---------------------------------------------------
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.nextEditSuggestions.enabled": true,
+
+  // --- Fewer confirmation pop-ups in the chat editor ------------------------
+  "chat.editing.confirmEditRequestRemoval": false,
+  "chat.editing.confirmEditRequestRetry": false,
+  "terminal.integrated.initialHint": false,
+
+  // --- POWER OPTION: auto-approve everything the agent runs ------------------
+  // Same as picking "Bypass" in the Approvals menu, but permanent for every
+  // project. The author keeps this ON because all work is in Git and can be
+  // undone. Leave it OFF until you are comfortable.
+  "chat.tools.global.autoApprove": true,
+
+  // --- Voice / dictation (the author talks to the agent) --------------------
+  "accessibility.voice.speechLanguage": "en-US",
+  "accessibility.voice.speechTimeout": 0,
+  "accessibility.signals.voiceRecordingStarted": { "sound": "off" },
+  "accessibility.signals.voiceRecordingStopped": { "sound": "off" },
+
+  // --- Git quality-of-life --------------------------------------------------
+  "git.autofetch": true,
+  "git.confirmSync": false,
+
+  // --- Fine-grained auto-approve lists (OPTIONAL) ---------------------------
+  // Instead of approving EVERYTHING (the power option above), you can approve
+  // only specific safe terminal commands or trusted URLs. VS Code grows these
+  // lists for you each time you click "Always allow", so they usually start
+  // empty and fill up over time. A few real entries from the author's machine:
+  "chat.tools.terminal.autoApprove": {
+    "python": true,
+    "dir": true,
+    "mv": true,
+    "mkdir": true,
+    "Test-Path": true,
+    "Get-Content": true,
+    "Set-Content": true,
+    "git add -A": { "approve": true, "matchCommandLine": true }
+  },
+  "chat.tools.urls.autoApprove": {
+    "https://code.visualstudio.com": true,
+    "https://just-the-docs.com": true,
+    "https://mermaid.js.org": true,
+    "https://*.github.io": true,
+    "https://learn.microsoft.com": true
+  }
+}

@@ -1,0 +1,78 @@
+name: Check .github/ Structure
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/instructions/**"
+      - ".github/prompts/**"
+      - ".github/templates/**"
+      - ".github/agents/**"
+      - ".github/skills/**"
+      - ".github/workflows/check-github-structure.yml"
+      - ".github/scripts/check-github-structure.py"
+  workflow_dispatch:
+
+jobs:
+  check-structure:
+    name: ".github/ Structure Validation"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Detect changed files (PR only)
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+            FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- \
+              '.github/instructions/' '.github/prompts/' '.github/templates/' \
+              '.github/agents/' '.github/skills/' \
+              || true)
+            # Also pick up any misplaced files (instructions/prompt/template
+            # files outside .github/) that were added or modified in the PR.
+            MISPLACED=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" \
+              | grep -E '\.(instructions\.md|prompt\.md|template\.\w+)$' \
+              | grep -v '^\.github/' || true)
+            FILES=$(printf '%s\n%s' "$FILES" "$MISPLACED" | sort -u | sed '/^$/d')
+
+            # If the validator script or this workflow changed, run a full scan
+            # so the validator itself is exercised even without content changes.
+            SELF_CHANGED=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- \
+              '.github/scripts/check-github-structure.py' \
+              '.github/workflows/check-github-structure.yml' \
+              || true)
+
+            if [ -n "$SELF_CHANGED" ] && [ -z "$FILES" ]; then
+              echo "Validator files changed — running full scan."
+              echo "scan_mode=full" >> "$GITHUB_OUTPUT"
+            elif [ -z "$FILES" ]; then
+              echo "No relevant files changed in this PR."
+              echo "scan_mode=none" >> "$GITHUB_OUTPUT"
+            else
+              COUNT=$(echo "$FILES" | wc -l)
+              echo "Delta scan — $COUNT changed file(s)."
+              echo "$FILES" > /tmp/changed_files.txt
+              echo "scan_mode=delta" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "scan_mode=full" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate structure (delta — PR)
+        if: steps.changed.outputs.scan_mode == 'delta'
+        run: |
+          python3 .github/scripts/check-github-structure.py --stdin < /tmp/changed_files.txt
+
+      - name: Validate structure (full — push / dispatch)
+        if: steps.changed.outputs.scan_mode == 'full'
+        run: |
+          python3 .github/scripts/check-github-structure.py .

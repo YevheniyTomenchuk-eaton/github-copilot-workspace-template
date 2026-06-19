@@ -1,0 +1,45 @@
+name: Check GitHub Pages
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+      - ".github/workflows/check-github-pages.yml"
+      - ".github/scripts/check-github-pages.py"
+  workflow_dispatch:
+
+jobs:
+  check-pages:
+    name: GitHub Pages Validation (Full Scan)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Check for relevant changes
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+            FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- '*.md' || true)
+            if [ -z "$FILES" ]; then
+              echo "No Markdown files changed — skipping."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "skip=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate GitHub Pages rules
+        if: steps.changed.outputs.skip != 'true'
+        run: python3 .github/scripts/check-github-pages.py .

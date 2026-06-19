@@ -1,0 +1,34 @@
+{
+  "chat.promptFilesLocations": {
+    ".github/prompts": true,
+    ".github/prompts/**": true
+  },
+  "chat.instructionsFilesLocations": {
+    ".github/instructions": true,
+    ".github/instructions/**": true
+  },
+  "chat.agentFilesLocations": {
+    ".github/agents": true
+  },
+  "chat.agentSkillsLocations": {
+    ".github/skills": true
+  },
+  "chat.hookFilesLocations": {
+    ".github/hooks": true
+  },
+  "chat.agent.enabled": true,
+  "chat.useAgentsMdFile": true,
+  "chat.useNestedAgentsMdFiles": true,
+  "chat.useAgentSkills": true,
+  "chat.promptFilesRecommendations": {
+    "ship": true
+  },
+  "editor.formatOnSave": false,
+  "git.autoRepositoryDetection": "openEditors",
+  "search.exclude": {
+    "_site/**": true,
+    ".sass-cache/**": true,
+    ".jekyll-cache/**": true,
+    ".tools/**": true
+  }
+}

@@ -1,0 +1,22 @@
+From: Sender Name <sender@example.com>
+To: Recipient Name <recipient@example.com>
+Subject: Subject line here
+Date: Mon, 09 Mar 2026 10:00:00 +0100
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+X-Unsent: 1
+
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
+
+<p>Opening line that states the purpose.</p>
+
+<p>Body content.</p>
+
+<p>Best regards,<br>
+FirstName</p>
+
+</body>
+</html>

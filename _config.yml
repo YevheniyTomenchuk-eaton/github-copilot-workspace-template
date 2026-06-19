@@ -1,0 +1,68 @@
+remote_theme: just-the-docs/just-the-docs
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-relative-links
+
+title: Copilot Workspace Template
+description: >-
+  A template for building your own GitHub Copilot-powered
+  workspace, published as a GitHub Pages site.
+
+# Search
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  button: true
+  focus_shortcut_key: 'k'
+
+# Mermaid diagrams
+mermaid:
+  version: "10.9.1"
+
+# Heading anchor links
+heading_anchors: true
+
+# Case-insensitive navigation sort
+nav_sort: case_insensitive
+
+# Aux links (top right)
+aux_links:
+  "GitHub":
+    - "https://github.com/your-org/your-repo"
+aux_links_new_tab: true
+
+# Footer
+gh_edit_link: true
+gh_edit_link_text: "Edit this page on GitHub"
+gh_edit_repository: "https://github.com/your-org/your-repo"
+gh_edit_branch: "main"
+gh_edit_view_mode: "tree"
+
+# Kramdown — disable math engine so MathJax v3 handles $$...$$ directly
+kramdown:
+  math_engine: null
+
+# Exclude from build
+exclude:
+  - .github/
+  - .vscode/
+  - Gemfile
+  - Gemfile.lock
+  - Gemfile.local
+  - Gemfile.local.lock
+  - _config_local.yml
+  - LICENSE
+  - .gitignore
+  - .gitattributes
+  - "*.sh"
+  - "*.ps1"
+
+  # Toolkit — generated Office documents (gitignored; category READMEs stay published)
+  - toolkit/email/*.eml
+  - toolkit/presentation/*.pptx
+  - toolkit/excel/*.xlsx
+  - toolkit/word/*.docx

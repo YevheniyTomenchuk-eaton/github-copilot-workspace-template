@@ -1,0 +1,22 @@
+// Wider main content area — 102.5rem (1640px) instead of default 50rem (800px).
+// Provides a better reading experience on modern PC monitors while
+// keeping the responsive layout intact for tablets and phones.
+//
+// This file is loaded after the theme's _variables.scss (which uses !default)
+// but before any CSS rules are emitted, so reassigning here takes effect
+// everywhere the variables are referenced.
+
+$content-width: 102.5rem;
+
+// Recompute layout variables that depend on $content-width.
+// The md breakpoint is intentionally kept at the theme default (50rem)
+// so the desktop sidebar layout still activates on tablets.
+$media-queries: (
+  xs: 20rem,
+  sm: 31.25rem,
+  md: 50rem,
+  lg: $content-width + $nav-width,
+  xl: 128.2rem,
+);
+
+$search-results-width: $content-width - $nav-width;

@@ -1,0 +1,92 @@
+<!-- MathJax v3 — renders inline and display math formulas.
+     kramdown (math_engine: null) converts $$...$$ to \[...\] and inline math to \(...\).
+     We also keep $...$ and $$...$$ so raw delimiters in non-kramdown contexts work. -->
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+  }
+};
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+<!-- svg-pan-zoom — interactive zoom/pan for mermaid SVG diagrams (fullscreen only) -->
+<script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"></script>
+<script>
+/* NO single-line comments — vendor/compress strips newlines */
+document.addEventListener('DOMContentLoaded', function() {
+  var attempts = 0;
+  var timer = setInterval(function() {
+    attempts++;
+    var svgs = document.querySelectorAll('code.language-mermaid svg');
+    if (svgs.length === 0 && attempts < 50) return;
+    clearInterval(timer);
+    svgs.forEach(function(svg) {
+      var pre = svg.closest('pre');
+      if (!pre) return;
+      var code = pre.querySelector('code.language-mermaid');
+      if (!code) return;
+      /* Wrap pre in a viewer container */
+      var wrapper = document.createElement('div');
+      wrapper.className = 'diagram-viewer';
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+      /* Fullscreen button */
+      var btn = document.createElement('button');
+      btn.className = 'diagram-fullscreen-btn';
+      btn.title = 'Open diagram fullscreen';
+      btn.setAttribute('aria-label', 'Open diagram fullscreen');
+      btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg><span>Fullscreen</span>';
+      wrapper.appendChild(btn);
+      /* Clone pristine SVG node for reliable restore (preserves SVG namespace) */
+      var origSvg = svg.cloneNode(true);
+      var pzInstance = null;
+      var wasFullscreen = false;
+      btn.addEventListener('click', function() {
+        var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+        if (!fsEl) {
+          var rfs = wrapper.requestFullscreen || wrapper.webkitRequestFullscreen;
+          if (rfs) { rfs.call(wrapper); }
+        } else {
+          var efs = document.exitFullscreen || document.webkitExitFullscreen;
+          if (efs) { efs.call(document); }
+        }
+      });
+      var onFsChange = function() {
+        var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+        if (fsEl === wrapper) {
+          /* Entering fullscreen — prepare SVG and activate svg-pan-zoom */
+          wasFullscreen = true;
+          svg.removeAttribute('width');
+          svg.removeAttribute('height');
+          svg.style.cssText = 'width:100%;height:100%;max-width:none;';
+          pre.classList.add('svg-pan-zoom-enabled');
+          /* Delay init to let the fullscreen transition finish and layout settle */
+          setTimeout(function() {
+            try { pzInstance = svgPanZoom(svg, { controlIconsEnabled: true, fit: true, center: true, minZoom: 0.3, maxZoom: 20, zoomScaleSensitivity: 0.3 }); } catch (e) { /* noop */ }
+            setTimeout(function() { if (pzInstance) { pzInstance.resize(); pzInstance.fit(); pzInstance.center(); } }, 150);
+          }, 300);
+        }
+        if (!fsEl && wasFullscreen) {
+          /* Exiting fullscreen — destroy pan-zoom and restore pristine SVG */
+          wasFullscreen = false;
+          if (pzInstance) { try { pzInstance.destroy(); } catch (e) { /* noop */ } pzInstance = null; }
+          pre.classList.remove('svg-pan-zoom-enabled');
+          pre.removeAttribute('style');
+          code.removeAttribute('style');
+          /* Replace DOM with a fresh clone of the original SVG (preserves namespace) */
+          while (code.firstChild) { code.removeChild(code.firstChild); }
+          var freshSvg = origSvg.cloneNode(true);
+          code.appendChild(freshSvg);
+          svg = freshSvg;
+        }
+      };
+      document.addEventListener('fullscreenchange', onFsChange);
+      document.addEventListener('webkitfullscreenchange', onFsChange);
+    });
+  }, 200);
+});
+</script>
