@@ -34,3 +34,15 @@ Every example wires together the same five pieces, mirroring the repo under `.gi
 - **Output** (`toolkit/<name>/`) — where the generated file lands (gitignored; only the README is tracked).
 
 Copy any one of these folders as the starting point for your own toolkit category.
+
+## Managing toolkits
+
+Two prompts automate the wiring so a new category is registered in **every** required place — published README, hub entry, instructions, prompts folder, optional templates, `.gitignore`, and the Jekyll `exclude:` in both config files. Miss one and the toolkit breaks silently (404, missing sidebar entry, generated files committed by mistake).
+
+| Prompt | What it does |
+|--------|--------------|
+| `/toolkit.create` | Create and register a brand-new toolkit category in all seven places |
+| `/toolkit.update` | Modify an existing toolkit — add, rename, or remove a prompt, change the output pattern, refresh the README, or rename/remove the whole category — and re-sync every registration point |
+
+Both follow the rules in [`.github/instructions/toolkit/toolkit.instructions.md`](../.github/instructions/toolkit/toolkit.instructions.md) (the "Toolkit Anatomy" section).
+
