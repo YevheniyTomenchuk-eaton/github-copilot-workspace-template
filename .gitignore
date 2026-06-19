@@ -24,8 +24,10 @@ _plugins/
 # Auto-downloaded tools
 .tools/
 
-# Reference material for AI analysis — local only, never published or committed
-/sources/
+# Reference material for AI analysis — local only, never published.
+# The folder itself is tracked (so it exists on clone) but its contents are ignored.
+/sources/*
+!/sources/README.md
 
 # Toolkit — generated Office documents (only README.md files are tracked)
 toolkit/email/*.eml
