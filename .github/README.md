@@ -45,11 +45,14 @@ The workspace is pre-configured in `.vscode/settings.json`:
   },
   "chat.agentSkillsLocations": {
     ".github/skills": true
+  },
+  "chat.hookFilesLocations": {
+    ".github/hooks": true
   }
 }
 ```
 
-This enables AI instructions, prompts, agents, and skills automatically. No extra setup needed.
+This enables AI instructions, prompts, agents, skills, and hooks automatically. No extra setup needed.
 
 ### 3. Run the site locally (optional)
 
