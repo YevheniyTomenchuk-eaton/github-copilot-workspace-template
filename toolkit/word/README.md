@@ -5,16 +5,14 @@ parent: "Toolkit"
 
 # 📄 Word
 
-Generate an on-brand Word document. The output is a `.docx` with a cover page, brand-colored headings, lead lines, callout boxes, banded tables, and a page-number footer.
+Generate an on-brand Word document, then upload it to SharePoint. The output is a `.docx` with a cover page, brand-colored headings, lead lines, callout boxes, banded tables, and a page-number footer.
 
-## How it works
+## Prompts
 
-- **Prompt:** `/toolkit.word.create` — turns your topic into a JSON spec and runs the build script.
-- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — loads the skill, writes the spec, and builds the document.
-- **Skill:** [`office-documents`](../../.github/skills/office-documents/SKILL.md) — the brand system and the full document-spec schema.
-- **Template:** `.github/templates/toolkit/word/toolkit.word.template.json` — the spec skeleton.
-- **Script:** `.github/scripts/toolkit/word/build-document.py` — renders the styled document.
-- **Instruction:** `.github/instructions/toolkit/word/toolkit.word.instructions.md` — output and naming rules.
+| Prompt | What it does |
+|--------|--------------|
+| `toolkit.word.create` | Turn a topic into a JSON spec and build the styled `.docx` |
+| `toolkit.word.upload` | Upload the generated `.docx` to a SharePoint folder you choose |
 
 ## Section building blocks
 
@@ -28,22 +26,29 @@ Each section starts with a `heading`; add any of these where they help:
 | `bullets` | A bulleted list |
 | `table` | A table with a shaded header and banded rows |
 
-## Output
+## Sources
 
-Each document lands in its own timestamped folder here:
+| What | Where |
+|------|-------|
+| Brand system + document spec schema | [`office-documents`](../../.github/skills/office-documents/SKILL.md) |
+| Spec template | `.github/templates/toolkit/word/toolkit.word.template.json` |
+| Generator script | `.github/scripts/toolkit/word/build-document.py` |
+| Upload script | [`sharepoint-upload`](../../.github/skills/sharepoint-upload/SKILL.md) |
+
+## Outputs
+
+| What | Where |
+|------|-------|
+| Per-run folder | `toolkit/word/YY-MM-DD-HHMM-short-description/` |
+| Document | `toolkit/word/YY-MM-DD-HHMM-short-description/document.docx` |
+
+All generated content under `toolkit/word/` is gitignored. Only this README is tracked. Run `pip install python-docx` once before the first build.
+
+## Folder layout
 
 ```text
-toolkit/word/YY-MM-DD-HHMM-short-description/
-  spec.json
-  document.docx
-```
-
-The generated files are gitignored — only this README is tracked. Run `pip install python-docx` once before the first build.
-
-## Try it
-
-Open Copilot Chat and run:
-
-```text
-/toolkit.word.create a one-page vendor evaluation report comparing three suppliers with a recommendation
+toolkit/word/
+└── YY-MM-DD-HHMM-short-description/
+    ├── spec.json        # the spec the generator built from
+    └── document.docx    # the styled document
 ```

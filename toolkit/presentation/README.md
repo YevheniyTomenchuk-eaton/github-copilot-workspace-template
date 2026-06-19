@@ -5,16 +5,14 @@ parent: "Toolkit"
 
 # 📊 Presentation
 
-Generate an on-brand PowerPoint deck. The output is a 16:9 widescreen `.pptx` with a branded title slide, section dividers, content layouts, and slide-number footers.
+Generate an on-brand PowerPoint deck, then upload it to SharePoint. The output is a 16:9 widescreen `.pptx` with a branded title slide, section dividers, content layouts, and slide-number footers.
 
-## How it works
+## Prompts
 
-- **Prompt:** `/toolkit.presentation.create` — turns your topic into a JSON spec and runs the build script.
-- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — loads the skill, writes the spec, and builds the deck.
-- **Skill:** [`office-documents`](../../.github/skills/office-documents/SKILL.md) — the brand system and the full slide-spec schema.
-- **Template:** `.github/templates/toolkit/presentation/toolkit.presentation.template.json` — the spec skeleton.
-- **Script:** `.github/scripts/toolkit/presentation/build-presentation.py` — renders the styled deck.
-- **Instruction:** `.github/instructions/toolkit/presentation/toolkit.presentation.instructions.md` — output and naming rules.
+| Prompt | What it does |
+|--------|--------------|
+| `toolkit.presentation.create` | Turn a topic into a JSON spec and build the styled `.pptx` |
+| `toolkit.presentation.upload` | Upload the generated `.pptx` to a SharePoint folder you choose |
 
 ## Slide layouts
 
@@ -25,22 +23,29 @@ Generate an on-brand PowerPoint deck. The output is a 16:9 widescreen `.pptx` wi
 | `two-column` | Two shaded panels — perfect for plan vs. actual or before/after |
 | `quote` | A large pull quote with an accent bar and attribution |
 
-## Output
+## Sources
 
-Each deck lands in its own timestamped folder here:
+| What | Where |
+|------|-------|
+| Brand system + slide spec schema | [`office-documents`](../../.github/skills/office-documents/SKILL.md) |
+| Spec template | `.github/templates/toolkit/presentation/toolkit.presentation.template.json` |
+| Generator script | `.github/scripts/toolkit/presentation/build-presentation.py` |
+| Upload script | [`sharepoint-upload`](../../.github/skills/sharepoint-upload/SKILL.md) |
+
+## Outputs
+
+| What | Where |
+|------|-------|
+| Per-run folder | `toolkit/presentation/YY-MM-DD-HHMM-short-description/` |
+| Deck | `toolkit/presentation/YY-MM-DD-HHMM-short-description/presentation.pptx` |
+
+All generated content under `toolkit/presentation/` is gitignored. Only this README is tracked. Run `pip install python-pptx` once before the first build.
+
+## Folder layout
 
 ```text
-toolkit/presentation/YY-MM-DD-HHMM-short-description/
-  spec.json
-  presentation.pptx
-```
-
-The generated files are gitignored — only this README is tracked. Run `pip install python-pptx` once before the first build.
-
-## Try it
-
-Open Copilot Chat and run:
-
-```text
-/toolkit.presentation.create a 6-slide Q3 review for leadership — three wins, plan vs. actual, and next quarter's focus
+toolkit/presentation/
+└── YY-MM-DD-HHMM-short-description/
+    ├── spec.json            # the spec the generator built from
+    └── presentation.pptx    # the styled deck
 ```

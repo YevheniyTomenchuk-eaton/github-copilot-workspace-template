@@ -7,30 +7,34 @@ parent: "Toolkit"
 
 Generate an on-brand email draft as an `.eml` file. Double-click the result and it opens in Outlook as an editable draft with a **Send** button — brand header band, clean typography, and a styled signature divider already in place.
 
-## How it works
+This category needs **no script** — the prompt fills an HTML template directly, so there is nothing to upload to SharePoint.
 
-This example needs **no script** — the prompt fills an HTML template directly:
+## Prompts
 
-- **Prompt:** `/toolkit.email.create` — gathers recipients, subject, and message, looks up your git identity as the sender, and writes the `.eml`.
-- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — looks up your git identity, fills the template, and writes the draft.
-- **Skill:** [`office-documents`](../../.github/skills/office-documents/SKILL.md) — the brand system and the email tone rules.
-- **Template:** `.github/templates/toolkit/email/toolkit.email.template.eml` — the branded `.eml` skeleton.
-- **Instruction:** `.github/instructions/toolkit/email/toolkit.email.instructions.md` — headers, format, and naming rules.
+| Prompt | What it does |
+|--------|--------------|
+| `toolkit.email.create` | Gather recipients, subject, and message, look up your git identity as the sender, and write the `.eml` |
 
-## Output
+## Sources
 
-Each email lands in its own timestamped folder here:
+| What | Where |
+|------|-------|
+| Brand system + email tone rules | [`office-documents`](../../.github/skills/office-documents/SKILL.md) |
+| Email template | `.github/templates/toolkit/email/toolkit.email.template.eml` |
+
+## Outputs
+
+| What | Where |
+|------|-------|
+| Per-run folder | `toolkit/email/YY-MM-DD-HHMM-short-description/` |
+| Email draft | `toolkit/email/YY-MM-DD-HHMM-short-description/email.eml` |
+
+All generated `.eml` files are gitignored. Only this README is tracked.
+
+## Folder layout
 
 ```text
-toolkit/email/YY-MM-DD-HHMM-short-description/email.eml
-```
-
-The generated `.eml` files are gitignored — only this README is tracked.
-
-## Try it
-
-Open Copilot Chat and run:
-
-```text
-/toolkit.email.create draft a note to my team summarising this week's progress
+toolkit/email/
+└── YY-MM-DD-HHMM-short-description/
+    └── email.eml        # the branded draft, opens in Outlook
 ```

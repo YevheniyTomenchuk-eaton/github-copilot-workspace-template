@@ -30,10 +30,14 @@ _plugins/
 !/sources/README.md
 
 # Toolkit — generated Office documents (only README.md files are tracked)
-toolkit/email/*.eml
-toolkit/presentation/*.pptx
-toolkit/excel/*.xlsx
-toolkit/word/*.docx
+toolkit/email/*
+!toolkit/email/README.md
+toolkit/presentation/*
+!toolkit/presentation/README.md
+toolkit/excel/*
+!toolkit/excel/README.md
+toolkit/word/*
+!toolkit/word/README.md
 
 # Scratch files for AI tool calls (gh GraphQL queries, response dumps)
 *.gql

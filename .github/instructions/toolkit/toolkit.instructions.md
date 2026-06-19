@@ -43,52 +43,16 @@ Every toolkit category is registered in **seven** places. Missing any one of the
 
 ### 1. Published page — `toolkit/{category}/README.md`
 
-The only file tracked in git for the category. Match the shape the existing examples use:
+The only file tracked in git for the category — and the only one published to Pages. Copy [`toolkit.category-readme.template.md`](../../templates/toolkit/toolkit.category-readme.template.md) as the starting point and fill in the placeholders.
 
-```markdown
----
-title: "{Display Name}"
-parent: "Toolkit"
----
-
-# {emoji} {Display Name}
-
-{One-paragraph purpose. Facts only — no storytelling.}
-
-## How it works
-
-- **Prompt:** `/toolkit.{category}.{action}` — {one line}.
-- **Template:** `.github/templates/toolkit/{category}/...` — {one line} (omit if none).
-- **Script:** `.github/scripts/toolkit/{category}/...` — {one line} (omit if none).
-- **Instruction:** `.github/instructions/toolkit/{category}/toolkit.{category}.instructions.md` — formatting and naming rules.
-
-## Output
-
-Each artifact lands in its own folder here:
-
-\`\`\`text
-toolkit/{category}/{output-pattern}
-\`\`\`
-
-The generated files are gitignored — only this README is tracked.
-
-## Try it
-
-Open Copilot Chat and run:
-
-\`\`\`text
-/toolkit.{category}.{action} {a short natural-language example}
-\`\`\`
-```
-
-`How it works`, `Output`, and `Try it` are mandatory. Drop the `Template` or `Script` bullet only when the category truly has neither.
+The template's shape is fixed: a one-paragraph purpose, a **Prompts** table (one row per action, including the optional `upload` action), an optional category-specific reference table, then **Sources**, **Outputs**, and **Folder layout**. Drop the `Generator script` and `Upload script` rows only when the category truly has neither.
 
 ### 2. Hub registration — `toolkit/README.md`
 
-Add a row to the `## Examples` table. The link target is `{category}/README.md`. Keep the existing columns:
+Add a row to the `## 📂 Categories` table. The link target is `{category}/README.md`. Keep the existing columns:
 
 ```markdown
-| [{Display Name}]({category}/README.md) | {what it generates} | {how it works} |
+| [{Display Name}]({category}/README.md) | {purpose — what it generates and where it goes} |
 ```
 
 ### 3. Instructions — `.github/instructions/toolkit/{category}/toolkit.{category}.instructions.md`

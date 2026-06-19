@@ -240,7 +240,8 @@ See the [`github-conventions`](skills/github-conventions/SKILL.md) skill for the
 ├── skills/                     # Layer 5 — reusable domain knowledge
 │   ├── github/                     # GitHub CLI and API patterns
 │   ├── github-conventions/         # How to choose and name .github/ files
-│   └── office-documents/           # Brand system + Office spec schemas
+│   ├── office-documents/           # Brand system + Office spec schemas
+│   └── sharepoint-upload/          # Upload files to any SharePoint folder
 ├── templates/                  # Structural skeletons
 │   ├── organization/               # Person page skeleton
 │   └── toolkit/

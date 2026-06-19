@@ -23,3 +23,7 @@ pip install python-pptx openpyxl python-docx
 ```
 
 The email example has no script — its prompt fills a text template directly.
+
+## Uploader
+
+[sharepoint-upload/upload-to-sharepoint.ps1](sharepoint-upload/upload-to-sharepoint.ps1) pushes a built file to a SharePoint folder. The site URL and target folder are passed in at call time — nothing is hardcoded. It emits `OUTPUT` (final folder URL) and `FILES` (count). The `*.upload` prompts in each category call it; see the [`sharepoint-upload`](../../skills/sharepoint-upload/SKILL.md) skill for parameters and the overwrite policy.

@@ -76,6 +76,7 @@ Workspace-wide prompts that work anywhere in the repository. Invoke each with `/
 | `github` | `gh` CLI and API — PR workflows, review threads, CI checks, Copilot re-review |
 | `github-conventions` | How to choose and name customization files under `.github/` |
 | `office-documents` | Brand system and JSON spec schemas for the Office document generators (deck, workbook, document, email) |
+| `sharepoint-upload` | Upload a local file or folder to any SharePoint folder you name at run time |
 
 Add your own skills for any domain knowledge you want agents to load on demand — see the [`github-conventions`](../.github/skills/github-conventions/SKILL.md) skill for the decision matrix.
 
