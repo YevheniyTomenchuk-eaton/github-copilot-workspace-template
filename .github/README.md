@@ -231,6 +231,8 @@ See the [`github-conventions`](skills/github-conventions/SKILL.md) skill for the
 │   ├── ship.prompt.md              # Submit changes via PR
 │   ├── validate.prompt.md          # Run all CI checks locally
 │   ├── fix-corrupted-file.prompt.md
+│   ├── fix-cr.prompt.md            # Resolve review comments + CI failures
+│   ├── fix-cr-autopilot.prompt.md  # Loop until the CR is clean
 │   └── toolkit/                    # Slash commands for the toolkit examples
 ├── agents/                     # Layer 4 — custom agent modes
 │   └── general.agent.md            # General-purpose, workspace-aware

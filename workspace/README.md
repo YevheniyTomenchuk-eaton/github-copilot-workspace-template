@@ -30,6 +30,7 @@ Everything you need to **work with this repository using GitHub Copilot Chat** �
 | **Scripts** | Validation and helper scripts the prompts run (e.g. `validate`) | `.github/scripts/` |
 | **Hooks** | Your own code that runs automatically on a chat lifecycle event | `.github/hooks/` |
 | **Workflows** | GitHub Actions that re-run the same checks on every PR | `.github/workflows/` |
+| **Sources** | Local-only reference material the AI can read but never publishes | `sources/` |
 
 You invoke a **prompt** or pick an **agent**; they pull in the right **skills**, **instructions**, and **templates** automatically. **Scripts** and **workflows** keep your work valid — `validate` runs the scripts locally, and the workflows re-run them on every PR.
 
@@ -58,6 +59,13 @@ Workspace-wide prompts that work anywhere in the repository. Invoke each with `/
 | Prompt | What it does |
 |--------|--------------|
 | `clean-memory` | Delete all AI memory files — enforces the policy that persistent knowledge lives in `.github/instructions/` |
+
+### Reviewing
+
+| Prompt | What it does |
+|--------|--------------|
+| `fix-cr` | One pass: resolve open review comments from every reviewer (human and Copilot), fix already-failed CI checks, reply, and request a fresh Copilot review |
+| `fix-cr-autopilot` | Unattended loop: fix review comments → push → request Copilot re-review → wait → repeat until the CR is clean |
 
 ---
 
