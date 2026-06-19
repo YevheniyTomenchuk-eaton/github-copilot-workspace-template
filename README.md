@@ -13,7 +13,7 @@ A starting point for building your own GitHub Copilot-powered workspace — teac
 
 ### 🧰 [Workspace](workspace/README.md)
 
-Your onboarding guide — how GitHub Copilot's customization layers (instructions, prompts, agents, skills) work and how to use them in this workspace.
+Your onboarding guide — how GitHub Copilot's customization layers (instructions, prompts, agents, skills, hooks) work and how to use them in this workspace.
 
 **Start here:** [Using Copilot →](workspace/README.md)
 
