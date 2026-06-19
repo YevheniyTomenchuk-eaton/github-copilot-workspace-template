@@ -1,19 +1,37 @@
 {
   "title": "Deck title",
   "subtitle": "Optional subtitle",
+  "author": "Author name",
+  "footer": "Short deck name",
   "slides": [
     {
-      "title": "First slide",
+      "layout": "section",
+      "title": "Part one"
+    },
+    {
+      "layout": "bullets",
+      "kicker": "Overview",
+      "title": "Slide with bullets",
       "bullets": [
         "First point",
-        "Second point"
+        "Second point",
+        "Third point"
       ]
     },
     {
-      "title": "Second slide",
-      "bullets": [
-        "Another point"
+      "layout": "two-column",
+      "title": "Compare two things",
+      "left": [
+        "Left point"
+      ],
+      "right": [
+        "Right point"
       ]
+    },
+    {
+      "layout": "quote",
+      "quote": "A short, memorable line.",
+      "attribution": "Who said it"
     }
   ]
 }

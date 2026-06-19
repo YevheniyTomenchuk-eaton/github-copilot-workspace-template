@@ -2,11 +2,14 @@
   "sheets": [
     {
       "name": "Sheet1",
-      "headers": ["Column A", "Column B"],
+      "title": "Sheet banner title",
+      "headers": ["Item", "Owner", "Value", "Share", "Date"],
+      "formats": ["text", "text", "currency", "percent", "date"],
       "rows": [
-        ["a1", "b1"],
-        ["a2", "b2"]
-      ]
+        ["First item", "Name", 120000, 0.8, "2026-08-15"],
+        ["Second item", "Name", 90000, 0.45, "2026-09-01"]
+      ],
+      "totals": ["Total", "", 210000, "", ""]
     }
   ]
 }

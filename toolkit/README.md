@@ -6,9 +6,9 @@ has_toc: false
 
 # 🛠️ Toolkit
 
-Worked examples that show the full customization pattern end to end. Each one is a small, self-contained demonstration of how a **prompt** drives a **script** and fills a **template**, governed by an **instruction** file — exactly the shape you reuse for your own automations.
+Worked examples that take a one-line request and produce a **finished, on-brand Office file** — a slide deck, a workbook, a report, or an email draft. Each one is a complete, copyable demonstration of the framework: a **prompt** drives a **script** that fills a **template**, governed by an **instruction** file, with a shared **skill** for the design system and a dedicated **agent** to run the whole thing.
 
-These examples generate everyday Office documents. To run the document generators, install their Python packages once:
+This is the "wow" demo. Run one prompt; open a document that looks like a design team made it.
 
 ```bash
 pip install python-pptx openpyxl python-docx
@@ -16,21 +16,29 @@ pip install python-pptx openpyxl python-docx
 
 ## Examples
 
-| Example | What it generates | How it works |
-|---------|-------------------|--------------|
-| [Email](email/README.md) | An Outlook-ready `.eml` draft | A template the prompt fills in — no script needed |
-| [Presentation](presentation/README.md) | A PowerPoint `.pptx` deck | A prompt writes a JSON spec, a Python script builds the file |
-| [Excel](excel/README.md) | An Excel `.xlsx` workbook | A prompt writes a JSON spec, a Python script builds the file |
-| [Word](word/README.md) | A Word `.docx` document | A prompt writes a JSON spec, a Python script builds the file |
+| Example | What it generates | The wow |
+|---------|-------------------|---------|
+| [Presentation](presentation/README.md) | A 16:9 PowerPoint `.pptx` deck | Branded title slide, section dividers, two-column & quote layouts, slide-number footers |
+| [Excel](excel/README.md) | An Excel `.xlsx` workbook | Banner title, frozen styled header, banded rows, currency/percent/date formats, auto-filter, totals |
+| [Word](word/README.md) | A Word `.docx` document | Cover page, brand-colored headings, callout boxes, banded tables, page-number footer |
+| [Email](email/README.md) | An Outlook-ready `.eml` draft | Brand header band, clean typography, styled signature divider — opens with a Send button |
+
+## What makes it one suite
+
+Every document shares one **design system** so a deck, a workbook, a report, and an email look like they belong together. The palette, type scale, layout rules, and the JSON spec each generator accepts all live in one place:
+
+- **Skill** — [`office-documents`](../.github/skills/office-documents/SKILL.md) holds the brand system and every spec schema. Prompts and the agent load it on demand.
+- **Agent** — [`toolkit`](../.github/agents/toolkit.agent.md) is the Office Document Producer. It loads the skill, picks the right prompt, and turns a rough ask into a polished file.
 
 ## The pattern they share
 
-Every example wires together the same five pieces, mirroring the repo under `.github/`:
+Every example wires together the same pieces, mirroring the repo under `.github/`:
 
 - **Instruction** (`.github/instructions/toolkit/<name>/`) — rules that auto-apply when you work in `toolkit/<name>/`.
 - **Prompt** (`.github/prompts/toolkit/<name>/`) — the `/` command you invoke to start the job.
-- **Template** (`.github/templates/toolkit/<name>/`) — the skeleton the output is built from.
-- **Script** (`.github/scripts/toolkit/<name>/`) — the deterministic generator the prompt calls.
+- **Template** (`.github/templates/toolkit/<name>/`) — the spec skeleton the output is built from.
+- **Script** (`.github/scripts/toolkit/<name>/`) — the deterministic generator that owns every color and border.
+- **Skill + Agent** — the shared design system and the producer that runs it.
 - **Output** (`toolkit/<name>/`) — where the generated file lands (gitignored; only the README is tracked).
 
 Copy any one of these folders as the starting point for your own toolkit category.
@@ -45,4 +53,3 @@ Two prompts automate the wiring so a new category is registered in **every** req
 | `/toolkit.update` | Modify an existing toolkit — add, rename, or remove a prompt, change the output pattern, refresh the README, or rename/remove the whole category — and re-sync every registration point |
 
 Both follow the rules in [`.github/instructions/toolkit/toolkit.instructions.md`](../.github/instructions/toolkit/toolkit.instructions.md) (the "Toolkit Anatomy" section).
-

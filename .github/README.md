@@ -157,7 +157,7 @@ Instructions stack hierarchically. Editing a file in `toolkit/email/` loads the 
 
 **Layer 3 — Prompts** (`prompts/`): Slash commands invoked manually (e.g., `/validate`, `/ship`). Each prompt links to template files and scripts, forcing the AI to use real, deterministic logic before generating anything.
 
-**Layer 4 — Agents** (`agents/`): Custom agent modes that specialize the AI for different contexts. Switch with `@agent-name` in chat. This template ships one agent, `@general`, aware of the workspace conventions. Add your own.
+**Layer 4 — Agents** (`agents/`): Custom agent modes that specialize the AI for different contexts. Switch with `@agent-name` in chat. This template ships `@general` (workspace-aware, any task) and `@toolkit` (the Office Document Producer behind the toolkit examples). Add your own.
 
 **Layer 5 — Skills** (`skills/`): Reusable domain knowledge packages that agents invoke automatically when they detect a matching task. Each skill lives in its own subfolder with a `SKILL.md` file containing step-by-step instructions, checklists, and reference examples.
 
@@ -235,10 +235,12 @@ See the [`github-conventions`](skills/github-conventions/SKILL.md) skill for the
 │   ├── fix-cr-autopilot.prompt.md  # Loop until the CR is clean
 │   └── toolkit/                    # Slash commands for the toolkit examples
 ├── agents/                     # Layer 4 — custom agent modes
-│   └── general.agent.md            # General-purpose, workspace-aware
+│   ├── general.agent.md            # General-purpose, workspace-aware
+│   └── toolkit.agent.md            # Office Document Producer (toolkit)
 ├── skills/                     # Layer 5 — reusable domain knowledge
 │   ├── github/                     # GitHub CLI and API patterns
-│   └── github-conventions/         # How to choose and name .github/ files
+│   ├── github-conventions/         # How to choose and name .github/ files
+│   └── office-documents/           # Brand system + Office spec schemas
 ├── templates/                  # Structural skeletons
 │   ├── organization/               # Person page skeleton
 │   └── toolkit/

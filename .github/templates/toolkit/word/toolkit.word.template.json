@@ -1,12 +1,27 @@
 {
   "title": "Document title",
+  "subtitle": "Optional subtitle",
+  "author": "Author name",
+  "date": "2026-06-19",
   "sections": [
     {
       "heading": "First section",
+      "lead": "An optional larger intro line under the heading.",
       "paragraphs": [
-        "First paragraph.",
+        "First paragraph in full sentences.",
         "Second paragraph."
-      ]
+      ],
+      "callout": "The one thing the reader must remember.",
+      "bullets": [
+        "Optional bullet point"
+      ],
+      "table": {
+        "headers": ["Column A", "Column B"],
+        "rows": [
+          ["a1", "b1"],
+          ["a2", "b2"]
+        ]
+      }
     },
     {
       "heading": "Second section",

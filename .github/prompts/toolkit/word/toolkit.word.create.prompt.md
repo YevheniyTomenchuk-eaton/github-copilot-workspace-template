@@ -1,25 +1,32 @@
 ---
-description: "Create a Word .docx document from a content spec. Use when the user says 'write a document', 'make a Word file', or '/toolkit.word.create'."
-agent: "agent"
+description: "Create a polished Word .docx document from a content spec. Use when the user says 'write a report', 'draft a document', 'make a one-pager', or '/toolkit.word.create'."
+agent: "toolkit"
 ---
 
 # Create Document
 
-Generate a Word document by writing a JSON spec and calling the build script. Follow the rules in [`toolkit.word.instructions.md`](../../../instructions/toolkit/word/toolkit.word.instructions.md).
+Turn a topic into a polished, on-brand Word document. You write a JSON spec; the build script renders the cover page, styled headings, lead lines, callout boxes, banded tables, and a page footer.
 
-## 1. Gather the content
+## 1. Load the rules
 
-Ask the user for the document topic and the sections it should contain. Draft the prose yourself from their input — full sentences, organized under clear headings.
+Read these before writing anything:
 
-## 2. Write the spec
+1. [`office-documents`](../../../skills/office-documents/SKILL.md) skill — the brand system and the full Word spec schema (section 4).
+2. [`toolkit.word.instructions.md`](../../../instructions/toolkit/word/toolkit.word.instructions.md) — output layout and naming.
+3. [`toolkit.instructions.md`](../../../instructions/toolkit/toolkit.instructions.md) — general writing style.
+
+## 2. Gather the content
+
+Ask only for what changes the document: the topic, the audience, and the recommendation or conclusion. Plan the sections — one topic each. Use a `lead` line to open a section, a `callout` for the one thing readers must remember, and a `table` for structured comparisons.
+
+## 3. Write the spec
 
 1. Copy [`toolkit.word.template.json`](../../../templates/toolkit/word/toolkit.word.template.json) as the starting point.
-2. Fill in `title` and the `sections` array.
-3. Save it to a timestamped folder: `toolkit/word/YY-MM-DD-HHMM-short-description/spec.json`.
+2. Fill `title`, `subtitle`, `author`, `date`, and the `sections` array. Each section needs a `heading`; add `lead`, `paragraphs`, `callout`, `bullets`, or `table` as needed.
+3. Write real prose — full sentences, not bullet fragments.
+4. Save to a timestamped folder: `toolkit/word/YY-MM-DD-HHMM-short-description/spec.json`.
 
-## 3. Build the document
-
-Run the generator:
+## 4. Build the document
 
 ```
 python .github/scripts/toolkit/word/build-document.py toolkit/word/YY-MM-DD-HHMM-short-description/spec.json toolkit/word/YY-MM-DD-HHMM-short-description/document.docx
@@ -27,6 +34,12 @@ python .github/scripts/toolkit/word/build-document.py toolkit/word/YY-MM-DD-HHMM
 
 If the script prints `ERROR=python-docx not installed`, tell the user to run `pip install python-docx` and retry.
 
-## 4. Confirm
+## 5. Confirm
 
-Read the `OUTPUT=` and `SECTIONS=` lines from the script output. Report the output path and section count to the user.
+Read the `OUTPUT=` and `SECTIONS=` lines and report the path and section count.
+
+## Example
+
+```
+/toolkit.word.create a one-page vendor evaluation report comparing three suppliers with a recommendation
+```

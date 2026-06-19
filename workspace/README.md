@@ -75,6 +75,7 @@ Workspace-wide prompts that work anywhere in the repository. Invoke each with `/
 |-------|----------------|
 | `github` | `gh` CLI and API — PR workflows, review threads, CI checks, Copilot re-review |
 | `github-conventions` | How to choose and name customization files under `.github/` |
+| `office-documents` | Brand system and JSON spec schemas for the Office document generators (deck, workbook, document, email) |
 
 Add your own skills for any domain knowledge you want agents to load on demand — see the [`github-conventions`](../.github/skills/github-conventions/SKILL.md) skill for the decision matrix.
 
@@ -85,5 +86,6 @@ Add your own skills for any domain knowledge you want agents to load on demand �
 | Agent | Use for |
 |-------|---------|
 | `general` | Any task — writing, research, terminal commands — with awareness of this workspace's conventions |
+| `toolkit` | Producing polished, on-brand Office files — a deck, workbook, document, or email draft |
 
 Pick an agent when a whole task fits its expertise; it brings its own instructions, skills, and tools. Define new agents under `.github/agents/` for specialized workflows.

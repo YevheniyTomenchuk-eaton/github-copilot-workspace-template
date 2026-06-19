@@ -5,35 +5,45 @@ parent: "Toolkit"
 
 # 📈 Excel
 
-Generate an Excel `.xlsx` workbook from a short content spec.
+Generate a polished, on-brand Excel workbook from a one-line request. The output is an `.xlsx` with a colored banner title, a frozen styled header, banded rows, number formatting, an auto-filter, and an optional totals row.
 
 ## How it works
 
-This example shows the **prompt → script** pattern:
-
-- **Prompt:** `/toolkit.excel.create` — turns your data into a JSON spec.
+- **Prompt:** `/toolkit.excel.create` — turns your data into a JSON spec and runs the build script.
+- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — the Office Document Producer that runs the job.
+- **Skill:** [`office-documents`](../../.github/skills/office-documents/SKILL.md) — the brand system and the full sheet-spec schema.
 - **Template:** `.github/templates/toolkit/excel/toolkit.excel.template.json` — the spec skeleton.
-- **Script:** `.github/scripts/toolkit/excel/build-workbook.py` — reads the spec and builds the `.xlsx` with [`openpyxl`](https://openpyxl.readthedocs.io/).
-- **Instruction:** `.github/instructions/toolkit/excel/toolkit.excel.instructions.md` — keeps generation in the script and rows aligned.
+- **Script:** `.github/scripts/toolkit/excel/build-workbook.py` — renders the styled workbook.
+- **Instruction:** `.github/instructions/toolkit/excel/toolkit.excel.instructions.md` — output and naming rules.
 
-## Requirements
+## Column formats
 
-```bash
-pip install openpyxl
-```
+Pick one token per column so numbers render correctly:
+
+| Token | Renders |
+|-------|---------|
+| `text` | Plain text (default) |
+| `number` | `#,##0` thousands |
+| `currency` | `$#,##0` |
+| `percent` | `0.8` → `80%` |
+| `date` | `2026-08-15` → a real date cell |
 
 ## Output
 
-```
+Each workbook lands in its own timestamped folder here:
+
+```text
 toolkit/excel/YY-MM-DD-HHMM-short-description/
   spec.json
   workbook.xlsx
 ```
 
-The `.xlsx` files are gitignored — only this README is tracked.
+The generated files are gitignored — only this README is tracked. Run `pip install openpyxl` once before the first build.
 
 ## Try it
 
-```
-/toolkit.excel.create a workbook with a sheet listing our team members and their roles
+Open Copilot Chat and run:
+
+```text
+/toolkit.excel.create a Q3 sales pipeline — deal, owner, value, probability, close date, with a totals row
 ```

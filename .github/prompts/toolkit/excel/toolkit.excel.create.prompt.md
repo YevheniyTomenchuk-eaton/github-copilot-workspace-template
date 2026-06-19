@@ -1,25 +1,32 @@
 ---
-description: "Create an Excel .xlsx workbook from a content spec. Use when the user says 'make a spreadsheet', 'build an Excel file', or '/toolkit.excel.create'."
-agent: "agent"
+description: "Create a polished Excel .xlsx workbook from a content spec. Use when the user says 'make a spreadsheet', 'build a workbook', 'budget', 'tracker', or '/toolkit.excel.create'."
+agent: "toolkit"
 ---
 
 # Create Workbook
 
-Generate an Excel workbook by writing a JSON spec and calling the build script. Follow the rules in [`toolkit.excel.instructions.md`](../../../instructions/toolkit/excel/toolkit.excel.instructions.md).
+Turn data into a polished, on-brand Excel workbook. You write a JSON spec; the build script renders the banner title, frozen styled header, banded rows, number formatting, auto-filter, and totals.
 
-## 1. Gather the data
+## 1. Load the rules
 
-Ask the user what the workbook should contain — the sheets, their columns, and the rows of data. If the data comes from a file or table, read it first.
+Read these before writing anything:
 
-## 2. Write the spec
+1. [`office-documents`](../../../skills/office-documents/SKILL.md) skill — the brand system and the full Excel spec schema (section 3).
+2. [`toolkit.excel.instructions.md`](../../../instructions/toolkit/excel/toolkit.excel.instructions.md) — output layout and naming.
+3. [`toolkit.instructions.md`](../../../instructions/toolkit/toolkit.instructions.md) — general writing style.
+
+## 2. Gather the content
+
+Ask only for what changes the workbook: what is being tracked, the columns, and whether a totals row is wanted. Pick a `formats` token per column (`text`, `number`, `currency`, `percent`, `date`) so numbers render correctly.
+
+## 3. Write the spec
 
 1. Copy [`toolkit.excel.template.json`](../../../templates/toolkit/excel/toolkit.excel.template.json) as the starting point.
-2. Fill in the `sheets` array. Ensure every row has the same number of values as its `headers`.
-3. Save it to a timestamped folder: `toolkit/excel/YY-MM-DD-HHMM-short-description/spec.json`.
+2. Fill each sheet's `name`, `title` banner, `headers`, `formats`, `rows`, and optional `totals`.
+3. Every row must match the header length. Percents are fractions (`0.8` → 80%); dates are `YYYY-MM-DD`.
+4. Save to a timestamped folder: `toolkit/excel/YY-MM-DD-HHMM-short-description/spec.json`.
 
-## 3. Build the workbook
-
-Run the generator:
+## 4. Build the workbook
 
 ```
 python .github/scripts/toolkit/excel/build-workbook.py toolkit/excel/YY-MM-DD-HHMM-short-description/spec.json toolkit/excel/YY-MM-DD-HHMM-short-description/workbook.xlsx
@@ -27,6 +34,12 @@ python .github/scripts/toolkit/excel/build-workbook.py toolkit/excel/YY-MM-DD-HH
 
 If the script prints `ERROR=openpyxl not installed`, tell the user to run `pip install openpyxl` and retry.
 
-## 4. Confirm
+## 5. Confirm
 
-Read the `OUTPUT=`, `SHEETS=`, and `ROWS=` lines from the script output. Report the output path and totals to the user.
+Read the `OUTPUT=`, `SHEETS=`, and `ROWS=` lines and report the path and counts.
+
+## Example
+
+```
+/toolkit.excel.create a Q3 sales pipeline — deal, owner, value, probability, close date, with a totals row
+```

@@ -4,23 +4,26 @@ applyTo: "toolkit/email/**"
 
 # Email Instructions
 
-Create email drafts in `.eml` format that open in Outlook as ready-to-send drafts.
+Create email drafts in `.eml` format that open in Outlook as ready-to-send drafts. This category needs no script — fill the HTML template directly.
+
+## Design system & tone
+
+The brand palette and the email tone rules live in the [`office-documents`](../../../skills/office-documents/SKILL.md) skill, section 5. Read it before drafting.
 
 ## Template
 
-Use the template at `.github/templates/toolkit/email/toolkit.email.template.eml`. The `.eml` format is both the template and the output format.
+Use `.github/templates/toolkit/email/toolkit.email.template.eml`. It carries a brand header band, clean typography, and a styled signature divider. Keep that structure — only swap the copy.
 
 ## Rules
 
-- **Format:** Always `.eml` with `X-Unsent: 1` header.
+- **Format:** Always `.eml` with the `X-Unsent: 1` header so Outlook opens it as an editable draft.
 - **Content-Type:** `text/html; charset=utf-8`.
-- **Font:** Calibri 11pt (Outlook default). Set via inline CSS on `<body>`.
-- **From:** Always run `git config user.name` and `git config user.email` to get the current user, and use that identity as the sender. Never assume or hardcode a sender — the person running the prompt is always the sender.
-- **To/CC:** Use full format: `Display Name <email@example.com>`. Ask the user for recipients if not given. If a recipient is documented under [`organization/people/`](../../../../organization/people/README.md), pull their display name and address from their person page instead of guessing.
-- **Subject:** Short and specific. Include the topic. No filler like "Regarding" or "About".
-- **Tone:** Professional but not stiff. Simple sentences. Direct.
-- **Length:** As short as possible. Get to the point in the first sentence.
-- **Signature:** First name only. No title or phone unless requested.
+- **From:** Always run `git config user.name` and `git config user.email` and use that identity. Never hardcode a sender — the person running the prompt is always the sender.
+- **To/CC:** Full format `Display Name <email@example.com>`. Ask for recipients if not given.
+- **Subject:** Short and specific. The topic, not "Regarding" or "Quick question".
+- **Tone:** Professional, direct, simple sentences.
+- **Length:** As short as possible. Purpose in the first sentence.
+- **Signature:** First name only, above the accent divider in the template.
 
 ## Output Structure
 
@@ -30,60 +33,10 @@ Each email gets its own folder:
 toolkit/email/YY-MM-DD-HHMM-short-description/email.eml
 ```
 
-Folder name: kebab-case, prefixed with a `YY-MM-DD-HHMM` timestamp. Main file is `email.eml`. Name additional files descriptively if needed.
-
-## .eml Format Reference
-
-```
-From: Sender Name <sender@example.com>
-To: Recipient Name <recipient@example.com>
-CC: Another Person <another@example.com>
-Subject: Subject line here
-Date: Mon, 09 Mar 2026 10:00:00 +0100
-MIME-Version: 1.0
-Content-Type: text/html; charset=utf-8
-X-Unsent: 1
-
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
-<body style="font-family: Calibri, Arial, sans-serif; font-size: 11pt;">
-
-<p>Opening line.</p>
-
-<p>Body content.</p>
-
-<p>Best regards,<br>
-FirstName</p>
-
-</body>
-</html>
-```
-
-## Key Header Notes
-
-- `X-Unsent: 1` makes Outlook open the file as an editable draft with a Send button.
-- `Date:` uses RFC 2822 format with the sender's local timezone offset.
-- Multiple recipients: separate with `, ` in the To/CC fields.
-
-## Email Style
-
-- First sentence states the purpose. No "I hope this email finds you well."
-- Use `<ul>` / `<ol>` for lists in the HTML body.
-- Use `<table>` for tabular data.
-- Keep paragraphs to 2–3 sentences max.
-- End with a clear ask or next step if one exists.
+Folder name: kebab-case, prefixed with a `YY-MM-DD-HHMM` timestamp. Main file is `email.eml`.
 
 ## Subject Examples
 
-Good:
+Good: "Sprint 24 review summary" · "Budget figures needed for Q3 report" · "Onboarding schedule for new hires"
 
-- "Sprint 24 review summary"
-- "Budget figures needed for Q3 report"
-- "Onboarding schedule for new hires"
-
-Bad:
-
-- "Regarding the review" (vague)
-- "Quick question" (uninformative)
-- "FYI" (says nothing)
+Bad: "Regarding the review" (vague) · "Quick question" (uninformative) · "FYI" (says nothing)
