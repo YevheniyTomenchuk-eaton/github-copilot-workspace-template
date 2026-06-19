@@ -1,11 +1,11 @@
 ---
-description: "Create a polished Word .docx document from a content spec. Use when the user says 'write a report', 'draft a document', 'make a one-pager', or '/toolkit.word.create'."
+description: "Create an on-brand Word .docx document from a content spec. Use when the user says 'write a report', 'draft a document', 'make a one-pager', or '/toolkit.word.create'."
 agent: "toolkit"
 ---
 
 # Create Document
 
-Turn a topic into a polished, on-brand Word document. You write a JSON spec; the build script renders the cover page, styled headings, lead lines, callout boxes, banded tables, and a page footer.
+Turn a topic into an on-brand Word document. You write a JSON spec; the build script renders the cover page, styled headings, lead lines, callout boxes, banded tables, and a page footer.
 
 ## 1. Load the rules
 

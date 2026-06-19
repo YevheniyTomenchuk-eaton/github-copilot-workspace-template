@@ -1,16 +1,16 @@
 ---
 name: office-documents
-description: "Design and generate polished, on-brand Office documents — PowerPoint decks, Excel workbooks, Word documents, and Outlook email drafts — from the toolkit/ examples. Holds the shared brand system (color palette, typography, layout rules) and the full JSON spec schema each generator script accepts. Use when: building or restyling a presentation, workbook, document, or email; deciding slide layouts, sheet formatting, document structure, or email tone; or extending a toolkit generator. DO NOT USE FOR: choosing which .github/ artifact to create (use github-conventions) or non-document tasks."
+description: "Design and generate on-brand Office documents — PowerPoint decks, Excel workbooks, Word documents, and Outlook email drafts — from the toolkit/ generators. Holds the shared brand system (color palette, typography, layout rules) and the full JSON spec schema each generator script accepts. Use when: building or restyling a presentation, workbook, document, or email; deciding slide layouts, sheet formatting, document structure, or email tone; or extending a toolkit generator. DO NOT USE FOR: choosing which .github/ artifact to create (use github-conventions) or non-document tasks."
 ---
 
 # Office Documents — Design System & Spec Reference
 
-This skill turns rough requests ("make a deck about Q3", "build a budget sheet") into **polished, on-brand** Office files. It owns two things every toolkit document generator shares:
+This skill turns a request ("make a deck about Q3", "build a budget sheet") into a **finished, on-brand** Office file. It owns two things every toolkit document generator shares:
 
-1. **The brand system** — one palette, one type scale, one set of layout rules. Apply it to every document so a deck, a workbook, a report, and an email all look like one suite.
+1. **The brand system** — one palette, one type scale, one set of layout rules. Apply it to every document so a deck, a workbook, a report, and an email stay consistent.
 2. **The spec schemas** — the exact JSON each generator script accepts. The prompt's only job is to turn the request into a valid spec; the script does the deterministic styling.
 
-> **Golden rule:** never hand-build a `.pptx`, `.xlsx`, or `.docx`. Write a JSON spec, call the script. The wow factor lives in the script — your job is great *content* in a valid spec.
+> **Rule:** never hand-build a `.pptx`, `.xlsx`, or `.docx`. Write a JSON spec, call the script. The styling lives in the script — your job is accurate, specific *content* in a valid spec.
 
 ---
 
@@ -45,10 +45,10 @@ Calibri is the safe default on every Windows + Office install. Don't pick exotic
 ### Layout rules
 
 - **One idea per unit** — one message per slide, one topic per section, one subject per email.
-- **Breathe.** Generous margins and white space read as "premium". Crowding reads as "draft".
-- **Accent sparingly.** The accent color marks *one* thing per view — the underline, the key number, the call to action. If everything is accented, nothing is.
+- **Use white space.** Generous margins and spacing keep a document readable. Crowding makes it hard to scan.
+- **Accent sparingly.** The accent color marks *one* thing per view — the underline, the key number, the call to action. If everything is accented, nothing stands out.
 - **Left-align** body text and headings. Center only cover/title blocks.
-- **Be specific.** Real names, real numbers, real dates. Placeholders kill the wow.
+- **Be specific.** Real names, real numbers, real dates. Placeholder content makes the document useless.
 
 ---
 

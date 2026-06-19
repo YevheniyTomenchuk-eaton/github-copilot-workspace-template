@@ -34,7 +34,7 @@ Everything you need to **work with this repository using GitHub Copilot Chat** �
 
 You invoke a **prompt** or pick an **agent**; they pull in the right **skills**, **instructions**, and **templates** automatically. **Scripts** and **workflows** keep your work valid — `validate` runs the scripts locally, and the workflows re-run them on every PR.
 
-Worked examples that generate Office documents live in the [Toolkit](../toolkit/README.md). This page covers the **workspace-wide** prompts and the building blocks they use.
+The [Toolkit](../toolkit/README.md) holds the Office document generators (deck, workbook, document, email). This page covers the **workspace-wide** prompts and the building blocks they use.
 
 ---
 
@@ -86,6 +86,6 @@ Add your own skills for any domain knowledge you want agents to load on demand �
 | Agent | Use for |
 |-------|---------|
 | `general` | Any task — writing, research, terminal commands — with awareness of this workspace's conventions |
-| `toolkit` | Producing polished, on-brand Office files — a deck, workbook, document, or email draft |
+| `toolkit` | Producing on-brand Office files — a deck, workbook, document, or email draft |
 
 Pick an agent when a whole task fits its expertise; it brings its own instructions, skills, and tools. Define new agents under `.github/agents/` for specialized workflows.

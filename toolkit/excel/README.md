@@ -5,12 +5,12 @@ parent: "Toolkit"
 
 # 📈 Excel
 
-Generate a polished, on-brand Excel workbook from a one-line request. The output is an `.xlsx` with a colored banner title, a frozen styled header, banded rows, number formatting, an auto-filter, and an optional totals row.
+Generate an on-brand Excel workbook. The output is an `.xlsx` with a colored banner title, a frozen styled header, banded rows, number formatting, an auto-filter, and an optional totals row.
 
 ## How it works
 
 - **Prompt:** `/toolkit.excel.create` — turns your data into a JSON spec and runs the build script.
-- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — the Office Document Producer that runs the job.
+- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — loads the skill, writes the spec, and builds the workbook.
 - **Skill:** [`office-documents`](../../.github/skills/office-documents/SKILL.md) — the brand system and the full sheet-spec schema.
 - **Template:** `.github/templates/toolkit/excel/toolkit.excel.template.json` — the spec skeleton.
 - **Script:** `.github/scripts/toolkit/excel/build-workbook.py` — renders the styled workbook.

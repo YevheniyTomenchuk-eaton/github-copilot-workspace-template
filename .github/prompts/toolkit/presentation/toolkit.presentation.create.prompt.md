@@ -1,11 +1,11 @@
 ---
-description: "Create a polished PowerPoint .pptx deck from a content spec. Use when the user says 'make a presentation', 'build a slide deck', or '/toolkit.presentation.create'."
+description: "Create an on-brand PowerPoint .pptx deck from a content spec. Use when the user says 'make a presentation', 'build a slide deck', or '/toolkit.presentation.create'."
 agent: "toolkit"
 ---
 
 # Create Presentation
 
-Turn a topic into a polished, on-brand PowerPoint deck. You write a JSON spec; the build script renders the branded title slide, section dividers, content layouts, and footers.
+Turn a topic into an on-brand PowerPoint deck. You write a JSON spec; the build script renders the branded title slide, section dividers, content layouts, and footers.
 
 ## 1. Load the rules
 

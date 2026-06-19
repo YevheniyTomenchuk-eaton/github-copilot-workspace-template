@@ -5,12 +5,12 @@ parent: "Toolkit"
 
 # 📄 Word
 
-Generate a polished, on-brand Word document from a one-line request. The output is a `.docx` with a cover page, brand-colored headings, lead lines, callout boxes, banded tables, and a page-number footer.
+Generate an on-brand Word document. The output is a `.docx` with a cover page, brand-colored headings, lead lines, callout boxes, banded tables, and a page-number footer.
 
 ## How it works
 
 - **Prompt:** `/toolkit.word.create` — turns your topic into a JSON spec and runs the build script.
-- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — the Office Document Producer that runs the job.
+- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — loads the skill, writes the spec, and builds the document.
 - **Skill:** [`office-documents`](../../.github/skills/office-documents/SKILL.md) — the brand system and the full document-spec schema.
 - **Template:** `.github/templates/toolkit/word/toolkit.word.template.json` — the spec skeleton.
 - **Script:** `.github/scripts/toolkit/word/build-document.py` — renders the styled document.

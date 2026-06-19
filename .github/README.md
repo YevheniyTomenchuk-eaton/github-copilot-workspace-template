@@ -96,7 +96,7 @@ The AI searches it only on request — use `grep_search` with `includeIgnoredFil
 | Folder | Description | Published |
 |--------|-------------|-----------|
 | `workspace/` | Onboarding guide — how to use Copilot in this workspace | ✅ |
-| `toolkit/` | Worked examples that generate Office documents — gitignored outputs | ✅ |
+| `toolkit/` | AI-powered Office document generators — gitignored outputs | ✅ |
 | `organization/` | Placeholder example — document people, sites, roles, and teams as a single source of truth | ✅ |
 | `sources/` | Optional local reference material for AI analysis — gitignored, never published | ❌ |
 | `.github/` | AI instructions, prompts, templates, agents, skills, scripts, and hooks | ❌ |

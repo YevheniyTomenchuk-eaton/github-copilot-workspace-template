@@ -5,7 +5,7 @@ agent: "toolkit"
 
 # Create Email Draft
 
-Turn a message into a polished, on-brand `.eml` draft that opens in Outlook with a **Send** button. You fill the HTML template directly — no script needed.
+Turn a message into an on-brand `.eml` draft that opens in Outlook with a **Send** button. You fill the HTML template directly — no script needed.
 
 ## 1. Load the rules
 

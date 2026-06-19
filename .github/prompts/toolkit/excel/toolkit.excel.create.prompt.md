@@ -1,11 +1,11 @@
 ---
-description: "Create a polished Excel .xlsx workbook from a content spec. Use when the user says 'make a spreadsheet', 'build a workbook', 'budget', 'tracker', or '/toolkit.excel.create'."
+description: "Create an on-brand Excel .xlsx workbook from a content spec. Use when the user says 'make a spreadsheet', 'build a workbook', 'budget', 'tracker', or '/toolkit.excel.create'."
 agent: "toolkit"
 ---
 
 # Create Workbook
 
-Turn data into a polished, on-brand Excel workbook. You write a JSON spec; the build script renders the banner title, frozen styled header, banded rows, number formatting, auto-filter, and totals.
+Turn data into an on-brand Excel workbook. You write a JSON spec; the build script renders the banner title, frozen styled header, banded rows, number formatting, auto-filter, and totals.
 
 ## 1. Load the rules
 

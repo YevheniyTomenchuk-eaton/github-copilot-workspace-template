@@ -5,12 +5,12 @@ parent: "Toolkit"
 
 # 📊 Presentation
 
-Generate a polished, on-brand PowerPoint deck from a one-line request. The output is a 16:9 widescreen `.pptx` with a branded title slide, section dividers, content layouts, and slide-number footers.
+Generate an on-brand PowerPoint deck. The output is a 16:9 widescreen `.pptx` with a branded title slide, section dividers, content layouts, and slide-number footers.
 
 ## How it works
 
 - **Prompt:** `/toolkit.presentation.create` — turns your topic into a JSON spec and runs the build script.
-- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — the Office Document Producer that runs the job.
+- **Agent:** [`toolkit`](../../.github/agents/toolkit.agent.md) — loads the skill, writes the spec, and builds the deck.
 - **Skill:** [`office-documents`](../../.github/skills/office-documents/SKILL.md) — the brand system and the full slide-spec schema.
 - **Template:** `.github/templates/toolkit/presentation/toolkit.presentation.template.json` — the spec skeleton.
 - **Script:** `.github/scripts/toolkit/presentation/build-presentation.py` — renders the styled deck.
