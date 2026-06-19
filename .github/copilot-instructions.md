@@ -62,6 +62,16 @@ These apply to all content you add. They are what the CI checks enforce.
 
 **Never discard uncommitted work.** These commands destroy work and must NEVER be run without explicit user permission: `git stash`, `git stash drop`, `git clean`, `git checkout -- .`, `git restore .`, `git reset --hard`. If you need to switch branches, commit and push first.
 
+## `sources/` — Local Reference Material
+
+The optional `sources/` folder is a local, gitignored place to drop **reference material you want the AI to read and analyze** — source code, data exports, specs, large documents, anything too big or too private to publish. It is **gitignored** and **excluded from Jekyll**, so nothing in it is committed or appears on the published site.
+
+**Purpose:** Give the AI real context for source-level analysis — verifying facts, tracing how something works, comparing versions, or pulling details out of a large file — without polluting the knowledge base.
+
+**When to search `sources/`:** Only when the task needs that reference material. Use `grep_search` with `includeIgnoredFiles: true` and `includePattern: "sources/**"` to search within it.
+
+**When NOT to search `sources/`:** During normal content editing. Default searches should NOT include `sources/` to avoid noise.
+
 ## YAML Front Matter (GitHub Pages Navigation)
 
 This site uses the **just-the-docs** Jekyll theme. Every published markdown file **must** start with YAML front matter (`---` block) so the theme can build sidebar navigation, search index, and breadcrumbs.

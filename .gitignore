@@ -24,6 +24,9 @@ _plugins/
 # Auto-downloaded tools
 .tools/
 
+# Reference material for AI analysis — local only, never published or committed
+/sources/
+
 # Toolkit — generated Office documents (only README.md files are tracked)
 toolkit/email/*.eml
 toolkit/presentation/*.pptx

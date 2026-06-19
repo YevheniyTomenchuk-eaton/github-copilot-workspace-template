@@ -78,6 +78,17 @@ For the GitHub helper scripts (PR review, CI checks), install and authenticate t
 gh auth login
 ```
 
+### 5. Set up the `sources/` folder (optional)
+
+The optional `sources/` folder is a local, gitignored place to drop **reference material you want the AI to read** — source code, data exports, specs, large documents, anything too big or too private to publish. It is gitignored and excluded from Jekyll, so nothing in it is committed or appears on the site. Create it whenever you have material the AI should analyze:
+
+```
+sources/
+└── <whatever you want the AI to read>
+```
+
+The AI searches it only on request — use `grep_search` with `includeIgnoredFiles: true` and `includePattern: "sources/**"`. Regular content editing does not need it.
+
 ---
 
 ## Repository Structure
@@ -87,6 +98,7 @@ gh auth login
 | `workspace/` | Onboarding guide — how to use Copilot in this workspace | ✅ |
 | `toolkit/` | Worked examples that generate Office documents — gitignored outputs | ✅ |
 | `organization/` | Placeholder example — document people, sites, roles, and teams as a single source of truth | ✅ |
+| `sources/` | Optional local reference material for AI analysis — gitignored, never published | ❌ |
 | `.github/` | AI instructions, prompts, templates, agents, skills, scripts, and hooks | ❌ |
 
 Add your own top-level folders for whatever content you want to publish — each becomes a section in the site sidebar.

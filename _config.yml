@@ -66,3 +66,6 @@ exclude:
   - toolkit/presentation/*.pptx
   - toolkit/excel/*.xlsx
   - toolkit/word/*.docx
+
+  # Reference material for AI analysis — gitignored, never published
+  - sources/
