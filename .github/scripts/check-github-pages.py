@@ -44,6 +44,7 @@ from collections import defaultdict
 # Directories excluded from scanning (not published as GitHub Pages).
 EXCLUDED_DIRS = (
     ".github",
+    "sources",
 )
 
 # Files exempt from kebab-case naming check.
