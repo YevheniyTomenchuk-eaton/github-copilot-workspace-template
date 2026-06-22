@@ -46,14 +46,18 @@ A placeholder example showing how to document people, sites, roles, and teams as
    gh auth login
    ```
 
-4. **Customize:** add your own content folders, instructions, prompts, and skills. See the [`.github/` framework guide](.github/README.md) and the [`github-conventions`](.github/skills/github-conventions/SKILL.md) skill for naming and placement rules.
+4. **Customize:** add your own content folders, instructions, prompts, and skills. See [Customization files](workspace/using-copilot/customization-files.md) for the naming and placement rules.
 
 ---
 
 ## 📚 Learn the Conventions
 
-- **[`.github/` Framework Guide](.github/README.md)** — the five-layer instruction model, folder mirroring, and naming conventions.
-- **[copilot-instructions.md](.github/copilot-instructions.md)** — the always-on global rules (naming, encoding, diagrams, navigation, git workflow).
-- **[Diagram Standards](.github/instructions/diagram-standards.instructions.md)** — the Mermaid palette and size limits enforced by CI.
+The conventions are taught in the published **Using Copilot** guide:
+
+- **[Customization files](workspace/using-copilot/customization-files.md)** — the seven building blocks (instructions, prompts, skills, agents, hooks, templates, scripts), folder mirroring, and naming conventions.
+- **[Context and commands](workspace/using-copilot/context-and-commands.md)** — how instructions, prompts, skills, and agents fit together.
+- **[Tips and tricks](workspace/using-copilot/tips-and-tricks.md)** — small habits that make Copilot faster, cheaper, and smarter.
+
+The always-on global rules and Mermaid diagram standards live in `.github/copilot-instructions.md` and `.github/instructions/` — open them in the repository source. They are intentionally excluded from this published site.
 
 Run `/validate` in Copilot Chat to check your content against all CI rules before shipping, and `/ship` to open a pull request.

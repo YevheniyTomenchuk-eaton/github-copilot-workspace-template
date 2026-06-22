@@ -154,6 +154,20 @@ Click the **Copilot icon** in the status bar to see credits used and when they r
 
 ---
 
+## 🔗 16. Add searchable source as a git submodule
+
+Want the AI to **search and index an external codebase**? Don't drop a plain copy into `sources/` — that folder is **gitignored**, so VS Code search and Copilot's index skip it by default (you'd have to force-include it every time).
+
+Instead, add the repo as a **git submodule**. A tracked submodule is:
+
+- **Indexed and searchable** like the rest of the workspace — no `includeIgnoredFiles` needed,
+- **Pinned to an exact commit**, so everyone clones the same source,
+- **Updated on demand** with `git submodule update --remote`.
+
+> ⚠️ **One catch:** the default `/sources/*` rule in `.gitignore` would hide the submodule too. Un-ignore its path (`!/sources/my-repo`) so the tracked submodule survives. The `sources/` README spells out the full pattern.
+
+---
+
 > ✅ **The one-line summary:** start fresh, give precise context, script and template the repetitive stuff, save what works, and match the model and effort to the task.
 
 ---

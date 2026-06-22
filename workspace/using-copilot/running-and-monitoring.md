@@ -57,6 +57,14 @@ Click the **Copilot icon** in the bottom-right **status bar** to see how many cr
 
 > ✅ **Check it often.** Powerful models and 1M context use credits faster. If usage climbs quickly, switch to a cheaper model (see [Choosing a model](choosing-a-model.md)).
 
+### See what each reply costs
+
+You don't have to open the flyout to spot a pricey turn. After every response, Copilot shows the **model it used** and the **credits that reply cost** — at the bottom-right of the answer.
+
+![Per-response credit cost](assets/19-response-cost.png)
+
+> 💡 **A price tag on every reply.** Glance here to learn which tasks are cheap and which burn credits — then drop to a lighter model when the number climbs. Remember: **1 credit = $0.01** (see [Eaton costs and limits](eaton-costs-and-limits.md)).
+
 ### Simple ways to spend less
 
 - ✅ Use **Auto** or a cheap model for simple work.

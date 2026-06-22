@@ -28,6 +28,10 @@ _plugins/
 # The folder itself is tracked (so it exists on clone) but its contents are ignored.
 /sources/*
 !/sources/README.md
+# Exception: tracked git submodules so the AI can index & search them.
+# A blanket /sources/* rule would also hide a submodule, so un-ignore each
+# submodule path you add under sources/, e.g.:
+#   !/sources/my-service
 
 # Toolkit — generated Office documents (only README.md files are tracked)
 toolkit/email/*
