@@ -19,7 +19,7 @@ If either is missing, **ask the user** — never guess a URL.
 ## Uploader — `upload-to-sharepoint.ps1`
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File .\.github\scripts\toolkit\sharepoint-upload\upload-to-sharepoint.ps1 `
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\.github\scripts\toolkit\sharepoint-upload\upload-to-sharepoint.ps1 `
     -LocalPath 'C:\path\to\file-or-folder', 'C:\another\file.pdf' `
     -SiteUrl 'https://contoso.sharepoint.com/sites/MyTeam' `
     -TargetFolder '/sites/MyTeam/Shared Documents/General/Reports' `

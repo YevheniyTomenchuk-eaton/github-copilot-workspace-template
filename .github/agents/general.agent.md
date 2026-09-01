@@ -15,7 +15,7 @@ Read [copilot-instructions.md](../copilot-instructions.md) when working with fil
 
 ### Key Concepts
 
-- **`.github/` conventions** — instructions, prompts, skills, agents, templates, and scripts all mirror the project folder structure by name. See [copilot-instructions.md](../copilot-instructions.md) and the guides under `.github/instructions/github/`.
+- **`.github/` conventions** — `instructions/` and `templates/` mirror the project folder structure by name; agents, hooks, and skills sit flat, with the name encoding the mirrored path (a skill is `.github/skills/<kebab-name>/SKILL.md`). Prompts are retired — every `/command` is a skill. See [copilot-instructions.md](../copilot-instructions.md) and the guides under `.github/instructions/github/`.
 - **Definition-file pattern (optional)** — give canonical values their own definition file and link to it instead of repeating the value as plain text.
 - **Diagrams** — Mermaid only. Follow [diagram-standards.instructions.md](../instructions/diagram-standards.instructions.md).
 - **File rules** — YAML front matter on all published `.md` files, UTF-8 no BOM, CRLF line endings, lowercase kebab-case naming.

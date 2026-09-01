@@ -158,7 +158,7 @@ $resp = gh api graphql --input "$env:TEMP\gh-reply.json" | ConvertFrom-Json
 
 - **Always** author body text in a **single-quoted** here-string (`@'...'@`) — never `@"..."@`, never a double-quoted inline string.
 - **Always** write to a file with `New-Object System.Text.UTF8Encoding $false` (UTF-8 **without BOM**) and post with `--body-file` / `--input`.
-- **Never** paste a multi-line here-string directly into the interactive terminal. Put it in a `.ps1` under `$env:TEMP` (or another explicitly scratch/temp location) and run via `powershell.exe -ExecutionPolicy Bypass -File`, or write the file in one non-interactive step. Keep scratch scripts out of the tracked repo — use `$env:TEMP` or a gitignored folder.
+- **Never** paste a multi-line here-string directly into the interactive terminal. Put it in a `.ps1` under `$env:TEMP` (or another explicitly scratch/temp location) and run via `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File`, or write the file in one non-interactive step. Keep scratch scripts out of the tracked repo — use `$env:TEMP` or a gitignored folder.
 - **Always** capture the `gh` return value and echo `POSTED_OK=<url>` as the final line. Treat the presence of that marker — **not** the appearance of the echoed command — as the success signal. A garbled command echo (e.g. a stray `8Encoding $false` fragment) is the terminal echoing your multi-line script, never a failure. Do **not** label such output "unclear" and re-verify; that wastes a turn. If (and only if) the `POSTED_OK=` line is genuinely absent, **read** the comments to check — never re-run the post.
 - **Before posting**, confirm the target has no existing copy; **after posting**, verify exactly one comment exists. If a post command's output is unclear, **read** the comments (do not re-run the post) — see the non-idempotency rule below.
 - When building per-item bodies in a loop, reference hashtable fields with subexpressions: `-f "body=$($t.msg)"`, never `-f body=$t.msg` (the latter passes the stringified hashtable).
@@ -170,7 +170,7 @@ $resp = gh api graphql --input "$env:TEMP\gh-reply.json" | ConvertFrom-Json
 ### Fetch all review threads (MANDATORY pagination)
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/fetch-review-threads.ps1" `
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/fetch-review-threads.ps1" `
   -Owner "<OWNER>" -Repo "<REPO>" -Pr <NUMBER>
 # add -UnresolvedOnly to write only unresolved threads; -OutFile <path> to choose the JSON location
 ```
@@ -188,7 +188,7 @@ Each thread carries a lightweight `comments(first: 10)` window plus `comments.to
 ### Fetch one thread's full comment history (on demand)
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/fetch-thread-comments.ps1" `
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/fetch-thread-comments.ps1" `
   -ThreadId "<THREAD_ID>"
 # -OutFile <path> to choose the JSON location
 ```
@@ -208,7 +208,7 @@ Review threads (inline file comments) are only **one of three** places a reviewe
 Humans frequently leave their **most important** guidance as a single global comment with **no inline threads at all** — "need fixes", "use the ADO template here", a paragraph of direction. A workflow that only walks `reviewThreads` will declare the CR clean while a substantive instruction sits unread. Copilot also emits a review summary body on every pass; a summary that generated **zero** inline comments is itself the convergence signal. Either way, global comments must be **read and addressed** even though they cannot be resolved like a thread.
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/fetch-pr-comments.ps1" `
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/fetch-pr-comments.ps1" `
   -Owner "<OWNER>" -Repo "<REPO>" -Pr <NUMBER>
 # add -Since "<ISO8601>" to keep only comments newer than a timestamp (how a loop finds NEW global
 #   comments per cycle — global comments have no resolved flag to track state); -OutFile <path> to choose location
@@ -228,7 +228,7 @@ Either way, never invent a thread to resolve — global comments have no resolve
 Author the reply body per §3 (single-quoted here-string → UTF-8 no-BOM file), then:
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/reply-to-thread.ps1" `
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/reply-to-thread.ps1" `
   -ThreadId "<THREAD_ID>" -BodyPath "$env:TEMP\reply.md"
 ```
 
@@ -237,13 +237,13 @@ The script builds the full GraphQL payload (query + variables) as one JSON objec
 ### Resolve a thread
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/resolve-thread.ps1" -ThreadId "<THREAD_ID>"
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/resolve-thread.ps1" -ThreadId "<THREAD_ID>"
 ```
 
 ### Un-resolve a thread
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/resolve-thread.ps1" -ThreadId "<THREAD_ID>" -Unresolve
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/resolve-thread.ps1" -ThreadId "<THREAD_ID>" -Unresolve
 ```
 
 ### CRITICAL: Reply and resolve/un-resolve as SEPARATE commands
@@ -325,7 +325,7 @@ gh pr comment <NUMBER> --body "<SUMMARY>"
 ### Request Copilot re-review
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/request-copilot-review.ps1" `
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/request-copilot-review.ps1" `
   -Owner "<OWNER>" -Repo "<REPO>" -Pr <NUMBER>
 ```
 
@@ -346,7 +346,7 @@ Using `Copilot` (capital C, no bot suffix) in the request silently returns HTTP 
 Record the Copilot review count **before** requesting (from the `fetch-review-threads` / reviews data), then poll:
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/poll-copilot-review.ps1" `
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/poll-copilot-review.ps1" `
   -Owner "<OWNER>" -Repo "<REPO>" -Pr <NUMBER> -ReviewCountBefore <REVIEW_COUNT_BEFORE> -Quiet
 ```
 
@@ -370,7 +370,7 @@ Exit conditions:
 Use the helper script — it queries the PR's checks **once**, never polls or waits for in-progress runs, and surfaces only completed failures with their run ids:
 
 ```powershell
-powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/check-pipeline-status.ps1" `
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/check-pipeline-status.ps1" `
   -Repo "<OWNER>/<REPO>" -Pr <NUMBER>
 ```
 

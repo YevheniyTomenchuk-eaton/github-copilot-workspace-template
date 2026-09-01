@@ -25,8 +25,7 @@ OUT_FILE=<path>
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$ThreadId,
+    [string]$ThreadId = $(throw 'Required parameter -ThreadId was not provided.'),
 
     [string]$OutFile
 )

@@ -3,7 +3,7 @@
 .SYNOPSIS
     Simulated background work for the hooks-tour chaining step: waits, then writes a completion marker file.
 .DESCRIPTION
-    Backs the PostToolUse chaining step of the workspace.demo.hooks-tour demo prompt. Run this in the
+    Backs the PostToolUse chaining step of the workspace.demo.hooks-tour demo skill. Run this in the
     background (async terminal) so the agent keeps working while it runs. After the delay it writes the
     marker file that the tour's PostToolUse hook (hook-tour.ps1) watches for. When the marker appears, the
     hook detects it on the agent's next tool call and chains the agent into a follow-up step it was never
@@ -22,10 +22,10 @@ param(
 $marker = Join-Path $env:TEMP 'demo-chain.ready'
 Remove-Item -LiteralPath $marker -Force -ErrorAction SilentlyContinue
 
-Write-Host "Background work started — running for $DelaySeconds second(s)..."
+Write-Host "Background work started $([char]0x2014) running for $DelaySeconds second(s)..."
 Start-Sleep -Seconds $DelaySeconds
 
 $result = "demo report generated at $(Get-Date -Format 'HH:mm:ss') with 3 sections"
 [System.IO.File]::WriteAllText($marker, $result, (New-Object System.Text.UTF8Encoding($false)))
 
-Write-Host "Background work complete — wrote marker '$marker'."
+Write-Host "Background work complete $([char]0x2014) wrote marker '$marker'."

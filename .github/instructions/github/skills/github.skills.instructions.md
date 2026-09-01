@@ -10,6 +10,32 @@ encoding, and **Script it or template it** rules live in
 skill-specific delta. The VS Code `agent-customization` skill is the general authority on the file
 format; read it when in doubt.
 
+## Skills Are the Only Command Artifact
+
+**Prompts are retired.** `.github/prompts/` does not exist and must never be recreated — the
+`Check .github/ Structure` workflow fails the build (`prompt-file-retired`) on any `*.prompt.*` file.
+Everything a prompt file used to do is now a skill, because a skill does strictly more:
+
+- It is invoked **exactly like a prompt** — type `/<skill-name>` in chat.
+- It is **also auto-invoked** when the agent matches a task against its `description`, so it fires
+  without anyone remembering the command name.
+- **Several skills can be combined in a single chat window**, and the agent loads them dynamically as
+  the work requires — a prompt file could not be chained that way.
+- Copilot indexes skills far better than prompt files, and the latest Visual Studio applications no
+  longer support prompt files at all.
+
+A skill therefore covers two shapes, and one skill may be either or both:
+
+| Shape | What it is | Example |
+|---|---|---|
+| **Recipe** | A runnable procedure the user starts with `/<name>` — the old prompt role | `/ship`, `/validate` |
+| **Know-how** | Reference knowledge the agent pulls in when the task matches, with no command typed | `github-conventions`, `office-documents` |
+
+Instructions remain distinct: an **instruction** is a standing rule that applies automatically to
+whatever files its `applyTo` glob matches. A skill is knowledge or a procedure that is *invoked* —
+by name or by task match. When in doubt: rules that must always hold → instruction; something you
+*do* or *look up* → skill.
+
 ## Structure
 
 - Each skill lives in its **own subfolder** under `.github/skills/` and contains a `SKILL.md` file
@@ -50,10 +76,16 @@ Per the **Script it or template it** Universal Rule:
 ### CI enforcement
 
 Skills are **exempt** from the [`check-customization-inline-logic`](../../../workflows/check-customization-inline-logic.yml)
-workflow that gates prompts, instructions, and agents — a skill is a reference document and may
-contain as many short command examples as it needs. The extraction/deduplication guidance above
-(which targets *reusable multi-step logic*, not illustrative one-liners) is still the expectation
-for skills, just not CI-enforced.
+workflow that gates instructions and agents — a skill is a reference document and may contain as
+many short command examples as it needs. The extraction/deduplication guidance above (which targets
+*reusable multi-step logic*, not illustrative one-liners) is still the expectation for skills, just
+not CI-enforced.
+
+## Registration
+
+After adding a skill that exposes a `/command`, register it in the workspace tables in
+[`workspace/README.md`](../../../../workspace/README.md) so people can discover it. Demo skills go in
+[`workspace/demo/README.md`](../../../../workspace/demo/README.md) instead.
 
 ## Encoding
 

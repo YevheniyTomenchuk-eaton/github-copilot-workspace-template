@@ -1,14 +1,14 @@
 <#
 .SYNOPSIS
-Fetch ALL PR-level (global) comments for a pull request — issue comments AND review summary bodies —
+Fetch ALL PR-level (global) comments for a pull request - issue comments AND review summary bodies -
 paginate completely, and write them to a JSON file.
 
 .DESCRIPTION
 Review THREADS (inline file comments) are only one of three places a reviewer can leave feedback. The
 other two are PR-LEVEL and have no "resolve" affordance, so a thread-only fetch silently misses them:
 
-  1. Issue comments      — the PR "Conversation" timeline (gh api .../issues/<pr>/comments).
-  2. Review summary bodies — the top-level body a reviewer types when submitting a review, separate from
+  1. Issue comments      - the PR "Conversation" timeline (gh api .../issues/<pr>/comments).
+  2. Review summary bodies - the top-level body a reviewer types when submitting a review, separate from
                              any inline comments (gh api .../pulls/<pr>/reviews, the non-empty .body).
 
 Humans frequently leave their most important guidance as a single global comment with NO inline threads
@@ -16,14 +16,14 @@ Humans frequently leave their most important guidance as a single global comment
 summary body every pass; a summary that generated zero inline comments is itself the convergence signal.
 Either way these must be READ and ADDRESSED even though they cannot be resolved like a thread.
 
-This script paginates BOTH REST surfaces with `--paginate --slurp` (robust across multi-page PRs — plain
+This script paginates BOTH REST surfaces with `--paginate --slurp` (robust across multi-page PRs - plain
 `--paginate` concatenates `[..][..]` which ConvertFrom-Json cannot parse), flattens the pages, and writes
 a single UTF-8 (no BOM) JSON object so the caller can read structured data without re-querying.
 
-Use `-Since <ISO8601>` to keep only comments created/submitted strictly after a timestamp — this is how an
+Use `-Since <ISO8601>` to keep only comments created/submitted strictly after a timestamp - this is how an
 autopilot loop finds the global comments that arrived since the previous cycle without re-addressing old
 ones (global comments have no resolved flag to track state). Empty-body review summaries are always
-dropped — only summaries with actual prose are returned.
+dropped - only summaries with actual prose are returned.
 
 It NEVER uses `--jq` (empty `--jq` output hides query failures rather than meaning "no comments").
 
@@ -50,14 +50,11 @@ OUT_FILE=<path>
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Owner,
+    [string]$Owner = $(throw 'Required parameter -Owner was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [string]$Repo,
+    [string]$Repo = $(throw 'Required parameter -Repo was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [int]$Pr,
+    [int]$Pr = $(throw 'Required parameter -Pr was not provided.'),
 
     [string]$Since,
 

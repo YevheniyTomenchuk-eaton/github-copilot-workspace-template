@@ -43,11 +43,11 @@ Everything on one page. Print it, pin it.
 
 ## 🧠 Model quick pick
 
-> ⭐ **A smart model writes the recipe; a cheaper one cooks from it.** Use **Opus 4.8** to build (new work, research, or your prompts/skills/scripts). Use **Auto** to repeat a built setup or for simple jobs.
+> ⭐ **A smart model writes the recipe; a cheaper one cooks from it.** Use **Opus 4.8** to build (new work, research, or your skills/instructions/scripts). Use **Auto** to repeat a built setup or for simple jobs.
 
 | Task | Model |
 |------|-------|
-| Building new stuff / research / writing prompts & scripts | **Opus 4.8** |
+| Building new stuff / research / writing skills & scripts | **Opus 4.8** |
 | Running a setup that is already built | Auto (10% cheaper) |
 | Simple edit, email, find, move | Auto, or GPT-5 mini / Gemini 3.5 Flash |
 | Normal coding (saving tokens) | Sonnet 4.6 or GPT-5.3-Codex |

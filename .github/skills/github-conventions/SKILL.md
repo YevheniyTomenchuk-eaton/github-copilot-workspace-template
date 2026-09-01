@@ -1,6 +1,6 @@
 ---
 name: github-conventions
-description: "Decide WHICH .github/ customization artifact to create (instruction, prompt, agent, skill, template, script, or hook), WHERE to put it, and HOW to name it in this repo. Covers: the artifact decision matrix, the dot-path mirroring naming rule, per-type frontmatter, the example marker, hook registration in settings, and the two CI validators (structure + inline-logic). Use when: creating or moving a file under .github/, asking 'is this an instruction or a prompt?', 'what do I name this file?', 'where does this go?', or fixing a structure/inline-logic CI failure. DO NOT USE FOR: the generic VS Code file FORMAT (the built-in agent-customization skill owns that) or non-.github content authoring."
+description: "Decide WHICH .github/ customization artifact to create (instruction, agent, skill, template, script, or hook), WHERE to put it, and HOW to name it in this repo. Covers: the artifact decision matrix, the dot-path mirroring naming rule, per-type frontmatter, the example marker, hook registration in settings, and the two CI validators (structure + inline-logic). Use when: creating or moving a file under .github/, asking 'is this an instruction or a skill?', 'what do I name this file?', 'where does this go?', or fixing a structure/inline-logic CI failure. DO NOT USE FOR: the generic VS Code file FORMAT (the built-in agent-customization skill owns that) or non-.github content authoring."
 ---
 
 # .github/ Customization Conventions
@@ -15,30 +15,37 @@ right canonical file fast, then make you run the validators.
 
 ## When to Use
 
-Any time you create, move, rename, or fix a file under `.github/instructions/`, `.github/prompts/`,
+Any time you create, move, rename, or fix a file under `.github/instructions/`,
 `.github/agents/`, `.github/skills/`, `.github/templates/`, `.github/scripts/`, or `.github/hooks/` —
 or when a `Check .github/ Structure` or `check-customization-inline-logic` CI job fails.
 
 ## Step 1 — Pick the artifact type
 
+> 🚫 **Prompts are retired.** This repository has no `.github/prompts/` folder — every `/command` is
+> a **skill**, invoked as `/name` exactly like a prompt *and* auto-matched by its `description`.
+> The `Check .github/ Structure` workflow **fails the build** (`prompt-file-retired`) on any file
+> under `.github/prompts/` or any `*.prompt.*` file, so never create one. Skills also compose:
+> several can be used in a single chat window, and the agent loads them dynamically as the work
+> requires.
+
 | You want to… | Use a… | Lives under | Authoring guide |
 |---|---|---|---|
 | Auto-apply rules whenever certain files are edited | **instruction** | `.github/instructions/` | [github.instructions.instructions.md](../../instructions/github/instructions/github.instructions.instructions.md) |
-| Give the user a `/command` to run a task | **prompt** | `.github/prompts/` | [github.prompts.instructions.md](../../instructions/github/prompts/github.prompts.instructions.md) |
+| Give the user a `/command`, or package reusable domain knowledge auto-invoked by task match | **skill** | `.github/skills/<name>/SKILL.md` | [github.skills.instructions.md](../../instructions/github/skills/github.skills.instructions.md) |
 | Define a selectable agent persona/mode | **agent** | `.github/agents/` | [github.agents.instructions.md](../../instructions/github/agents/github.agents.instructions.md) |
-| Package reusable domain knowledge auto-invoked by task match | **skill** | `.github/skills/<name>/SKILL.md` | [github.skills.instructions.md](../../instructions/github/skills/github.skills.instructions.md) |
 | Provide a fixed file skeleton the AI fills in | **template** | `.github/templates/` | shared rules in [copilot-instructions.md](../../copilot-instructions.md) |
-| Provide reusable executable logic that prompts/skills call | **script** | `.github/scripts/<domain>/` | [scripts/github/README.md](../../scripts/github/README.md) |
+| Provide reusable executable logic that skills call | **script** | `.github/scripts/<domain>/` | [scripts/github/README.md](../../scripts/github/README.md) |
 | Run an automation when a lifecycle event fires | **hook** | `.github/hooks/` (flat) | [github.hooks.instructions.md](../../instructions/github/hooks/github.hooks.instructions.md) |
 
 Quick disambiguation:
 
-- **instruction vs prompt** — an instruction fires automatically by `applyTo` glob; a prompt is
-  explicitly invoked as `/name`.
-- **prompt vs skill** — a prompt is the entry-point command; a skill is the reusable knowledge a
-  prompt or agent leans on. A skill is auto-matched by its `description`.
+- **instruction vs skill** — an instruction fires automatically by `applyTo` glob; a skill is either
+  invoked explicitly as `/name` or auto-matched by its `description`. Rules that must always hold →
+  instruction; something you *do* or *look up* → skill.
+- **the two shapes of a skill** — a *recipe* (a runnable `/command`, the role prompts used to fill)
+  and *know-how* (reference knowledge pulled in on task match). One skill may be both.
 - **template vs script** — a template owns a file's *shape*; a script owns *executable logic*.
-  Never inline either into a prompt/instruction/agent body (see Step 4).
+  Never inline either into a skill/instruction/agent body (see Step 4).
 - **script vs hook** — a script *is* the logic; a hook is the JSON binding that runs a script when a
   lifecycle event fires. A hook never embeds logic — its `command` points at a script.
 
@@ -89,30 +96,38 @@ git status   # illustrative only — not the prescribed call
 
 ## Step 5 — Validate before shipping
 
-Run both validators from the repo root and fix everything they report:
+Run these validators from the repo root and fix everything they report:
 
 ```pwsh
 python .github/scripts/check-github-structure.py .
 python .github/scripts/check-customization-inline-logic.py .
+python .github/scripts/check-powershell-conventions.py .
 ```
 
 What they enforce:
 
 - **[check-github-structure](../../workflows/check-github-structure.yml)** — naming/placement/mirroring,
   frontmatter presence, kebab-case, duplicate/duplicate-keyword suffixes, misplaced files, the
-  `leading-fence-wrapper` check, the obsolete `mode:`-key check on prompts, and hook JSON validity
-  (valid JSON, a top-level `hooks` object, recognised event names).
+  `leading-fence-wrapper` check, the `prompt-file-retired` ban on any reintroduced prompt artifact,
+  and hook JSON validity (valid JSON, a top-level `hooks` object, recognised event names).
 - **[check-customization-inline-logic](../../workflows/check-customization-inline-logic.yml)** — fails
-  on inlined reusable scripts or file skeletons in prompts/instructions/agents (skills excluded).
+  on inlined reusable scripts or file skeletons in instructions/agents (skills excluded).
+- **[check-powershell-conventions](../../workflows/check-powershell-conventions.yml)** — the four
+  `.ps1` helper rules from [copilot-instructions.md](../../copilot-instructions.md): `-NoProfile
+  -NonInteractive` at every launch site, `$(throw)` defaults instead of `Mandatory` parameters,
+  pure-ASCII script bodies, and Git capture only through `invoke-git-command.ps1`. Run it whenever
+  you add or call a `.ps1` helper.
 
 `check-github-structure` runs on PRs (delta) and on push-to-main / manual dispatch (full scan).
-`check-customization-inline-logic` runs **delta-only** on PRs *and* push-to-main (only the changed
-customization files are audited); a full-tree inline-logic audit happens only via manual
-`workflow_dispatch`.
+`check-customization-inline-logic` and `check-powershell-conventions` run **delta-only** on PRs
+*and* push-to-main (only the changed files are audited), so pre-existing debt is grandfathered; a
+full-tree audit happens via manual `workflow_dispatch`. `check-powershell-conventions` escalates to
+a full scan by itself whenever its own checker or workflow changes, since that alters how every
+file is judged.
 
 ## Step 6 — Register and encode
 
-- New `/command` prompt → add it to the **Authoring & shipping** table in
+- New `/command` skill → add it to the **Workspace Skills** table in
   [workspace/README.md](../../../workspace/README.md).
 - New hook in a deliberately nested subfolder → add its folder to `chat.hookFilesLocations` in
   [.vscode/settings.json](../../../.vscode/settings.json). Flat `.github/hooks/*.json` files need no

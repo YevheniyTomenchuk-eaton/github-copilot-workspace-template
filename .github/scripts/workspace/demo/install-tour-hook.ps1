@@ -3,9 +3,9 @@
 .SYNOPSIS
     Install or remove the temporary hooks-tour hook that wires every hook event to hook-tour.ps1.
 .DESCRIPTION
-    Backs the workspace.demo.hooks-tour demo prompt. The hook JSON the demo needs is a *file shape*,
-    so it lives here in the script (its one canonical home) instead of being pasted into the prompt.
-    The prompt only calls this script.
+    Backs the workspace.demo.hooks-tour demo skill. The hook JSON the demo needs is a *file shape*,
+    so it lives here in the script (its one canonical home) instead of being pasted into the skill.
+    The skill only calls this script.
 
     Default run: arms the tour (creates a fresh demo-hooks-tour marker folder in TEMP so hook-tour.ps1
     wakes up) and writes the temporary hook file .github/hooks/workspace.demo.hooks-tour.json that
@@ -51,8 +51,8 @@ foreach ($name in $events) {
     $hooks[$name] = @(
         [ordered]@{
             type    = 'command'
-            command = "powershell -ExecutionPolicy Bypass -File .github/scripts/workspace/demo/hook-tour.ps1 -Event $name"
-            windows = "powershell -ExecutionPolicy Bypass -File .github\scripts\workspace\demo\hook-tour.ps1 -Event $name"
+            command = "powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .github/scripts/workspace/demo/hook-tour.ps1 -Event $name"
+            windows = "powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .github\scripts\workspace\demo\hook-tour.ps1 -Event $name"
         }
     )
 }

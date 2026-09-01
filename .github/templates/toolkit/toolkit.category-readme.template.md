@@ -7,12 +7,12 @@ parent: "Toolkit"
 
 {One-paragraph purpose. Facts only — say what the category generates and what the output looks like.}
 
-## Prompts
+## Skills
 
-| Prompt | What it does |
-|--------|--------------|
-| `toolkit.{category}.{action}` | {What it builds, in one line} |
-| `toolkit.{category}.upload` | Upload the generated {file} to a SharePoint folder you choose |
+| Skill | What it does |
+|-------|--------------|
+| `/toolkit-{category}-{action}` | {What it builds, in one line} |
+| `/toolkit-{category}-upload` | Upload the generated {file} to a SharePoint folder you choose |
 
 {Optional: a category-specific reference table — slide layouts, column formats, section blocks. Keep it only if it helps the reader fill the spec.}
 

@@ -5,7 +5,7 @@ grand_parent: "Using GitHub Copilot"
 nav_order: 6
 ---
 
-# 6️⃣ Templates — the skeletons new files copy from
+# 5️⃣ Templates — the skeletons new files copy from
 
 | ← Previous | Next → |
 |:---|---:|
@@ -27,7 +27,7 @@ Templates live in `.github/templates/`, mirroring the same repository structure 
 | Headings and front matter drift over time | Structure is identical and correct by construction |
 | The AI may invent missing sections | The AI fills in known blanks |
 
-> ✅ A template owns the **shape** of a file. The [instruction](instructions.md) or [prompt](prompts.md) that creates the file owns *when* and *how* to fill it — and links to the template rather than spelling the skeleton out.
+> ✅ A template owns the **shape** of a file. The [instruction](instructions.md) or [skill](skills.md) that creates the file owns *when* and *how* to fill it — and links to the template rather than spelling the skeleton out.
 
 ---
 

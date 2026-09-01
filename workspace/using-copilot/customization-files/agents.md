@@ -5,7 +5,7 @@ grand_parent: "Using GitHub Copilot"
 nav_order: 4
 ---
 
-# 4️⃣ Agents — expert modes with their own rules
+# 3️⃣ Agents — expert modes with their own rules
 
 | ← Previous | Next → |
 |:---|---:|
@@ -20,7 +20,7 @@ An **agent** is a whole **chat mode** built for one kind of work. It has its own
 name: general
 description: "General-purpose assistant with full awareness of this
 repository's structure and conventions. Use for any task — authoring,
-research, or running the workspace prompts."
+research, or running the workspace skills."
 ---
 # General Agent
 You help with any task in this repository, following its conventions…
@@ -61,9 +61,9 @@ This template ships a single ready-made `general` agent so you have a clean star
 
 ---
 
-## 🧭 Agent vs prompt
+## 🧭 Agent vs skill
 
-A [prompt](prompts.md) is a *single job* you run inside whatever mode you're in. An **agent** is a *persistent persona* — the rules and tools stay in force for the whole conversation, across many prompts and messages.
+A [skill](skills.md) is a *single job or a single body of know-how*, pulled into whatever mode you're already in — and several can be pulled in over one conversation. An **agent** is a *persistent persona*: its rules and tools stay in force for the whole conversation, underneath every skill that loads along the way.
 
 ---
 

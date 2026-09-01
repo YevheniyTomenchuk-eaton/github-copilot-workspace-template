@@ -8,7 +8,7 @@ description: "Design and generate on-brand Office documents — PowerPoint decks
 This skill turns a request ("make a deck about Q3", "build a budget sheet") into a **finished, on-brand** Office file. It owns two things every toolkit document generator shares:
 
 1. **The brand system** — one palette, one type scale, one set of layout rules. Apply it to every document so a deck, a workbook, a report, and an email stay consistent.
-2. **The spec schemas** — the exact JSON each generator script accepts. The prompt's only job is to turn the request into a valid spec; the script does the deterministic styling.
+2. **The spec schemas** — the exact JSON each generator script accepts. The skill's only job is to turn the request into a valid spec; the script does the deterministic styling.
 
 > **Rule:** never hand-build a `.pptx`, `.xlsx`, or `.docx`. Write a JSON spec, call the script. The styling lives in the script — your job is accurate, specific *content* in a valid spec.
 
@@ -169,7 +169,7 @@ Fill `.github/templates/toolkit/email/toolkit.email.template.eml`. The template 
 
 Rules:
 
-- **Sender** = the person running the prompt. Always read `git config user.name` / `git config user.email`; never hardcode.
+- **Sender** = the person running the skill. Always read `git config user.name` / `git config user.email`; never hardcode.
 - **Subject** is short and specific — the topic, no "Regarding" / "Quick question" filler.
 - **First sentence states the purpose.** No "I hope this finds you well."
 - **Keep the brand header band and signature divider** from the template; only swap the copy.

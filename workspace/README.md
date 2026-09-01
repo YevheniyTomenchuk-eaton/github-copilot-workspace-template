@@ -6,7 +6,7 @@ has_toc: false
 
 # 🧰 Workspace
 
-Everything you need to **work with this repository using GitHub Copilot Chat** — the prompts, skills, agents, and instructions that turn it into an automated workspace.
+Everything you need to **work with this repository using GitHub Copilot Chat** — the skills, agents, instructions, and hooks that turn it into an automated workspace.
 
 > 🆕 **New to GitHub Copilot in VS Code?** Start with the **[Using GitHub Copilot](using-copilot/README.md)** guide — a short, picture-led walkthrough of agents, models, approvals, context, and costs. No prior experience needed.
 
@@ -15,61 +15,62 @@ Everything you need to **work with this repository using GitHub Copilot Chat** �
 ## 🚀 Start here
 
 1. Open this repository in VS Code (`code .`). Copilot picks up the `.github/` customization folders automatically.
-2. Open Copilot Chat, switch to **Agent** mode, and try a prompt — type `/` to see the available slash commands.
+2. Open Copilot Chat, switch to **Agent** mode, and try a skill — type `/` to see the available slash commands.
 3. Preview the published site locally with `/pages` whenever you want to see your changes rendered.
 
 ## 🧩 How the pieces fit together
 
 | Piece | What it is | Where it lives |
 |-------|-----------|----------------|
-| **Prompts** | Named workflows you invoke with `/<name>` | `.github/prompts/` |
-| **Skills** | Reusable domain know-how a prompt or agent loads on demand | `.github/skills/` |
+| **Skills** | Named workflows you invoke with `/<name>`, and reusable domain know-how an agent loads on demand | `.github/skills/` |
 | **Agents** | Specialized chat modes with their own instructions and tools | `.github/agents/` |
 | **Instructions** | Rules that auto-apply based on the file you are editing | `.github/instructions/` |
 | **Templates** | Structural skeletons new files are copied from | `.github/templates/` |
-| **Scripts** | Validation and helper scripts the prompts run (e.g. `validate`) | `.github/scripts/` |
+| **Scripts** | Validation and helper scripts the skills run (e.g. `/validate`) | `.github/scripts/` |
 | **Hooks** | Your own code that runs automatically on a chat lifecycle event | `.github/hooks/` |
 | **Workflows** | GitHub Actions that re-run the same checks on every PR | `.github/workflows/` |
 | **Sources** | Local-only reference material the AI can read but never publishes | `sources/` |
 
-You invoke a **prompt** or pick an **agent**; they pull in the right **skills**, **instructions**, and **templates** automatically. **Scripts** and **workflows** keep your work valid — `validate` runs the scripts locally, and the workflows re-run them on every PR.
+You type a **`/command`** or pick an **agent**; they pull in the right **skills**, **instructions**, and **templates** automatically. **Scripts** and **workflows** keep your work valid — `/validate` runs the scripts locally, and the workflows re-run them on every PR.
 
-The [Toolkit](../toolkit/README.md) holds the Office document generators (deck, workbook, document, email). This page covers the **workspace-wide** prompts and the building blocks they use.
+The [Toolkit](../toolkit/README.md) holds the Office document generators (deck, workbook, document, email). This page covers the **workspace-wide** skills and the building blocks they use.
 
 ---
 
-## ⚡ Workspace Prompts
+## ⚡ Workspace Skills
 
-Workspace-wide prompts that work anywhere in the repository. Invoke each with `/<name>` and describe what you need.
+Workspace-wide skills that work anywhere in the repository. Invoke each with `/<name>` and describe what you need — or just describe the job, and the agent loads the matching skill by itself.
 
 ### Authoring & shipping
 
-| Prompt | What it does |
-|--------|--------------|
-| `validate` | Run all CI validation checks locally (front matter, links, tables, diagrams, encoding) before shipping |
-| `ship` | Commit, push, and open a pull request — never commits to `main` directly |
-| `latest` | Switch to `main` and pull the latest commits — refuses to switch with uncommitted work |
-| `update-branch` | Merge the latest base branch into the current feature branch and resolve conflicts — like GitHub's Update branch button |
-| `pages` | Start the local GitHub Pages preview server (sets up Ruby + Bundler if needed) |
-| `fix-corrupted-file` | Restore emojis and special characters that got replaced with `?` or `??` (encoding corruption) |
-| `create-customization` | Scaffold a new `.github/` customization file (instruction, prompt, agent, skill, template, script, or hook) in the right place with the right name |
+| Skill | What it does |
+|-------|--------------|
+| `/validate` | Run all CI validation checks locally (front matter, links, tables, diagrams, encoding) before shipping |
+| `/ship` | Commit, push, and open a pull request — never commits to `main` directly |
+| `/latest` | Switch to `main` and pull the latest commits — refuses to switch with uncommitted work |
+| `/update-branch` | Merge the latest base branch into the current feature branch and resolve conflicts — like GitHub's Update branch button |
+| `/pages` | Start the local GitHub Pages preview server (sets up Ruby + Bundler if needed) |
+| `/fix-corrupted-file` | Restore emojis and special characters that got replaced with `?` or `??` (encoding corruption) |
+| `/create-customization` | Scaffold a new `.github/` customization file (instruction, skill, agent, template, script, or hook) in the right place with the right name |
 
 ### Maintenance
 
-| Prompt | What it does |
-|--------|--------------|
-| `clean-memory` | Delete all AI memory files — enforces the policy that persistent knowledge lives in `.github/instructions/` |
+| Skill | What it does |
+|-------|--------------|
+| `/clean-memory` | Delete all AI memory files — enforces the policy that persistent knowledge lives in `.github/instructions/` |
 
 ### Reviewing
 
-| Prompt | What it does |
-|--------|--------------|
-| `fix-cr` | One pass: resolve open review comments from every reviewer (human and Copilot), fix already-failed CI checks, reply, and request a fresh Copilot review |
-| `fix-cr-autopilot` | Unattended loop: fix review comments → push → request Copilot re-review → wait → repeat until the CR is clean |
+| Skill | What it does |
+|-------|--------------|
+| `/fix-cr` | One pass: resolve open review comments from every reviewer (human and Copilot), fix already-failed CI checks, reply, and request a fresh Copilot review |
+| `/fix-cr-autopilot` | Unattended loop: fix review comments → push → request Copilot re-review → wait → repeat until the CR is clean |
 
 ---
 
-## 🧠 Skills
+## 🧠 Knowledge skills
+
+Same building block, other shape: these carry no workflow of their own — they are the **know-how** an agent loads the moment your task matches their description.
 
 | Skill | What it covers |
 |-------|----------------|

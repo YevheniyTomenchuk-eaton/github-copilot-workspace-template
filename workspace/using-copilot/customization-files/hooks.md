@@ -5,7 +5,7 @@ grand_parent: "Using GitHub Copilot"
 nav_order: 5
 ---
 
-# 5️⃣ Hooks — automation that fires on an event
+# 4️⃣ Hooks — automation that fires on an event
 
 | ← Previous | Next → |
 |:---|---:|
@@ -17,7 +17,7 @@ A **hook** is an automation that runs **by itself when something happens** — n
 
 The difference that matters: an instruction only *guides*, but a hook runs **your own code** and can **enforce** an outcome — a `PreToolUse` hook can even **stop** an action before it runs. That makes hooks perfect for **guardrails**, **auto-formatting**, and **audit trails** — things you want guaranteed, not just requested.
 
-> 🎬 **See every event live:** run the [`/workspace.demo.hooks-tour`](../../demo/README.md) demo. It installs one temporary hook file that maps all events to the same guide script, then triggers them one by one — a block, an auto-action, a real chain where a hook hands the agent a follow-up step unprompted, a subagent, an error, a continue — so you can watch each one fire, then removes the hook so nothing is left behind.
+> 🎬 **See every event live:** run the [`/workspace-demo-hooks-tour`](../../demo/README.md) demo. It installs one temporary hook file that maps all events to the same guide script, then triggers them one by one — a block, an auto-action, a real chain where a hook hands the agent a follow-up step unprompted, a subagent, an error, a continue — so you can watch each one fire, then removes the hook so nothing is left behind.
 
 ---
 

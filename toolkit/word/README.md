@@ -7,12 +7,12 @@ parent: "Toolkit"
 
 Generate an on-brand Word document, then upload it to SharePoint. The output is a `.docx` with a cover page, brand-colored headings, lead lines, callout boxes, banded tables, and a page-number footer.
 
-## Prompts
+## Skills
 
-| Prompt | What it does |
-|--------|--------------|
-| `toolkit.word.create` | Turn a topic into a JSON spec and build the styled `.docx` |
-| `toolkit.word.upload` | Upload the generated `.docx` to a SharePoint folder you choose |
+| Skill | What it does |
+|-------|--------------|
+| `/toolkit-word-create` | Turn a topic into a JSON spec and build the styled `.docx` |
+| `/toolkit-word-upload` | Upload the generated `.docx` to a SharePoint folder you choose |
 
 ## Section building blocks
 

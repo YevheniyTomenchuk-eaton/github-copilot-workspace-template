@@ -2,10 +2,10 @@
 
 Reusable PowerShell scripts for GitHub PR review workflows. They encapsulate the pagination, charset,
 and idempotency rules that brittle inline `gh api graphql` snippets keep getting wrong. The
-[`github` skill](../../skills/github/SKILL.md) and the `fix-cr` / `code-review` prompts call these
+[`github` skill](../../skills/github/SKILL.md) and the `/fix-cr` / `/fix-cr-autopilot` skills call these
 instead of reconstructing the mutations by hand.
 
-Run each via `powershell.exe -ExecutionPolicy Bypass -File ".github/scripts/github/<script>.ps1" ...`.
+Run each via `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/<script>.ps1" ...`.
 
 | Script | Purpose | Key output |
 |---|---|---|

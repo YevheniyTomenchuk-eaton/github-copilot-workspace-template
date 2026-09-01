@@ -3,11 +3,11 @@
 .SYNOPSIS
     One generic hook handler that backs the workspace.demo.hooks-tour demo for EVERY hook event.
 .DESCRIPTION
-    Backs the workspace.demo.hooks-tour demo prompt. The prompt installs a single temporary hook
+    Backs the workspace.demo.hooks-tour demo skill. The skill installs a single temporary hook
     file (.github/hooks/workspace.demo.hooks-tour.json) that maps every supported hook event to this
     one script, passing the event name with -Event. VS Code pipes the hook input JSON on stdin.
 
-    The script is INERT unless the demo is "armed": the prompt creates a marker directory in TEMP
+    The script is INERT unless the demo is "armed": the skill creates a marker directory in TEMP
     before the tour and removes it afterwards. While not armed the script returns {"continue": true}
     and does nothing, so even a stray hook can never affect real work.
 
@@ -35,8 +35,7 @@
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Event
+    [string]$Event = $(throw 'Required parameter -Event was not provided.')
 )
 
 $sentinel = 'DEMO-TOUR-BLOCK'

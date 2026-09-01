@@ -1,7 +1,7 @@
 param(
-    [Parameter(Mandatory = $true)][string[]]$LocalPath,
-    [Parameter(Mandatory = $true)][string]$SiteUrl,
-    [Parameter(Mandatory = $true)][string]$TargetFolder,
+    [string[]]$LocalPath = $(throw 'Required parameter -LocalPath was not provided.'),
+    [string]$SiteUrl = $(throw 'Required parameter -SiteUrl was not provided.'),
+    [string]$TargetFolder = $(throw 'Required parameter -TargetFolder was not provided.'),
     [switch]$Overwrite,
     [switch]$CreateFolder
 )

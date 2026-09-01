@@ -13,7 +13,7 @@ format; read it when in doubt.
 ## Naming — Dot-Path Mirroring (Flat Folder)
 
 An agent's filename **encodes the project folder it operates on** as a dot-path, exactly like
-prompts, templates, and hooks — but the file sits **flat** in `.github/agents/`, never in nested
+templates and hooks — but the file sits **flat** in `.github/agents/`, never in nested
 subfolders. An agent for `toolkit/dev/` is `toolkit.dev.agent.md`; a code-review variant adds one
 trailing descriptor segment, `toolkit.dev.cr.agent.md`.
 
@@ -28,7 +28,7 @@ Every agent file starts with a YAML frontmatter block:
 ```yaml
 ---
 name: general
-description: "General-purpose assistant aware of this workspace's conventions. Use for any task: authoring, research, or running the workspace prompts."
+description: "General-purpose assistant aware of this workspace's conventions. Use for any task: authoring, research, or running the workspace skills."
 ---
 ```
 
@@ -43,12 +43,12 @@ description: "General-purpose assistant aware of this workspace's conventions. U
 ## Body
 
 The body is the **system prompt** for that agent mode — the persona, scope, intent-detection table,
-and the prompts/skills it should delegate to. Keep it declarative.
+and the skills it should delegate to. Keep it declarative.
 
 ## Keep Agents Declarative — Never Inline Logic
 
 Per the **Script it or template it** Universal Rule, an agent body must not embed multi-line
-shell / PowerShell / Python snippets or full file skeletons. Delegate executable steps to prompts
+shell / PowerShell / Python snippets or full file skeletons. Delegate executable steps to skills
 that call scripts under `.github/scripts/`, and reference templates under `.github/templates/` for
 file shapes. If the same logic appears across agents, extract it to one canonical script.
 

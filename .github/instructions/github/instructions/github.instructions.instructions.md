@@ -30,12 +30,12 @@ applyTo: "gaps/**"
   `gaps/foundation/statuses/` lives at `.github/instructions/gaps/foundation/statuses/`. An
   instruction that governs a `.github/` subfolder mirrors that path too, with the leading `.github`
   segment encoded without its dot — e.g. one governing
-  `.github/prompts/**` lives at `.github/instructions/github/prompts/`.
+  `.github/skills/**` lives at `.github/instructions/github/skills/`.
 - File name is the dot-joined path plus the `.instructions.md` suffix
   (e.g. `gaps.foundation.statuses.instructions.md`). The dot-prefix must encode the full directory
   path — never skip, reorder, or abbreviate segments. A path segment whose name begins with a dot
   (such as `.github`) is encoded **without its leading dot** — the dot is the segment separator, so
-  `.github/prompts/` becomes `github.prompts`, never `.github.prompts` (see the Leading-dot rule in
+  `.github/skills/` becomes `github.skills`, never `.github.skills` (see the Leading-dot rule in
   `copilot-instructions.md`).
 - When one directory needs multiple instruction files, add a descriptor:
   `{path}.{descriptor}.instructions.md`.

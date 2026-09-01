@@ -39,14 +39,11 @@ COMMENTS_TRUNCATED=<n>   (only when one or more threads have more comments than 
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Owner,
+    [string]$Owner = $(throw 'Required parameter -Owner was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [string]$Repo,
+    [string]$Repo = $(throw 'Required parameter -Repo was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [int]$Pr,
+    [int]$Pr = $(throw 'Required parameter -Pr was not provided.'),
 
     [string]$OutFile,
 

@@ -9,9 +9,9 @@ Developer guide for cloning, setting up, and customizing this AI-powered workspa
 A **template** for building your own GitHub Copilot-powered workspace. It pairs two things:
 
 1. A **GitHub Pages** site (Jekyll + [just-the-docs](https://just-the-docs.com/README.md)) — any Markdown you add is published as a searchable documentation site.
-2. An **AI framework** under `.github/` — instructions, prompts, agents, skills, templates, scripts, and hooks that teach Copilot your conventions and automate repeatable tasks.
+2. An **AI framework** under `.github/` — instructions, agents, skills, templates, scripts, and hooks that teach Copilot your conventions and automate repeatable tasks.
 
-Clone it, open it in VS Code, keep what helps, and delete what you don't need. The `toolkit/` examples (email, presentation, excel, word) demonstrate the end-to-end pattern: a prompt that calls a script and fills a template, governed by an instruction file.
+Clone it, open it in VS Code, keep what helps, and delete what you don't need. The `toolkit/` examples (email, presentation, excel, word) demonstrate the end-to-end pattern: a skill that calls a script and fills a template, governed by an instruction file.
 
 ## Quick Start
 
@@ -32,10 +32,6 @@ The workspace is pre-configured in `.vscode/settings.json`:
 
 ```json
 {
-  "chat.promptFilesLocations": {
-    ".github/prompts": true,
-    ".github/prompts/**": true
-  },
   "chat.instructionsFilesLocations": {
     ".github/instructions": true,
     ".github/instructions/**": true
@@ -48,11 +44,23 @@ The workspace is pre-configured in `.vscode/settings.json`:
   },
   "chat.hookFilesLocations": {
     ".github/hooks": true
+  },
+  "chat.agent.enabled": true,
+  "chat.useAgentsMdFile": true,
+  "chat.useNestedAgentsMdFiles": true,
+  "chat.useAgentSkills": true,
+  "editor.formatOnSave": false,
+  "git.autoRepositoryDetection": "openEditors",
+  "search.exclude": {
+    "_site/**": true,
+    ".sass-cache/**": true,
+    ".jekyll-cache/**": true,
+    ".tools/**": true
   }
 }
 ```
 
-This enables AI instructions, prompts, agents, skills, and hooks automatically. No extra setup needed.
+This enables AI instructions, agents, skills, and hooks automatically. No extra setup needed.
 
 ### 3. Run the site locally (optional)
 
@@ -99,7 +107,7 @@ The AI searches it only on request — use `grep_search` with `includeIgnoredFil
 | `toolkit/` | AI-powered Office document generators — gitignored outputs | ✅ |
 | `organization/` | Placeholder example — document people, sites, roles, and teams as a single source of truth | ✅ |
 | `sources/` | Optional local reference material for AI analysis — gitignored, never published | ❌ |
-| `.github/` | AI instructions, prompts, templates, agents, skills, scripts, and hooks | ❌ |
+| `.github/` | AI instructions, templates, agents, skills, scripts, and hooks | ❌ |
 
 Add your own top-level folders for whatever content you want to publish — each becomes a section in the site sidebar.
 
@@ -119,27 +127,22 @@ The AI framework uses a **waterfall** of layers. Each adds more specific context
 ┌─────────────────────────────────────────────────┐
 │  Layer 1: Global Instructions                   │
 │  .github/copilot-instructions.md                │
-│  Always loaded. Repository rules, naming,        │
-│  encoding, navigation, conventions.              │
+│  Always loaded. Repository rules, naming,       │
+│  encoding, navigation, conventions.             │
 ├─────────────────────────────────────────────────┤
 │  Layer 2: Contextual Instructions               │
 │  .github/instructions/{domain}/                 │
-│  Auto-loaded when working in matching folders.   │
-│  Domain-specific rules stack hierarchically.     │
+│  Auto-loaded when working in matching folders.  │
+│  Domain-specific rules stack hierarchically.    │
 ├─────────────────────────────────────────────────┤
-│  Layer 3: Prompts                               │
-│  .github/prompts/{domain}/                      │
-│  Manually invoked slash commands.                │
-│  Each prompt links to templates and scripts.     │
-├─────────────────────────────────────────────────┤
-│  Layer 4: Agents                                │
+│  Layer 3: Agents                                │
 │  .github/agents/{name}.agent.md                 │
-│  Custom agent modes with specialized behavior.   │
+│  Custom agent modes with specialized behavior.  │
 ├─────────────────────────────────────────────────┤
-│  Layer 5: Skills                                │
+│  Layer 4: Skills                                │
 │  .github/skills/{name}/SKILL.md                 │
-│  Reusable domain knowledge packages.             │
-│  Auto-invoked when agent detects matching task.  │
+│  Slash commands (/name) plus reusable know-how. │
+│  Auto-invoked when the task matches.            │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -155,11 +158,14 @@ applyTo: "toolkit/**"
 
 Instructions stack hierarchically. Editing a file in `toolkit/email/` loads the global instructions plus every instruction whose `applyTo` glob matches that path. Each level adds rules without repeating what the parent already defined.
 
-**Layer 3 — Prompts** (`prompts/`): Slash commands invoked manually (e.g., `/validate`, `/ship`). Each prompt links to template files and scripts, forcing the AI to use real, deterministic logic before generating anything.
+**Layer 3 — Agents** (`agents/`): Custom agent modes that specialize the AI for different contexts. Switch with `@agent-name` in chat. This template ships `@general` (workspace-aware, any task) and `@toolkit` (the Office Document Producer behind the toolkit examples). Add your own.
 
-**Layer 4 — Agents** (`agents/`): Custom agent modes that specialize the AI for different contexts. Switch with `@agent-name` in chat. This template ships `@general` (workspace-aware, any task) and `@toolkit` (the Office Document Producer behind the toolkit examples). Add your own.
+**Layer 4 — Skills** (`skills/`): The command-and-knowledge layer. Each skill lives in its own subfolder with a `SKILL.md` file, and takes one of two shapes — a skill may be both:
 
-**Layer 5 — Skills** (`skills/`): Reusable domain knowledge packages that agents invoke automatically when they detect a matching task. Each skill lives in its own subfolder with a `SKILL.md` file containing step-by-step instructions, checklists, and reference examples.
+- **Recipe** — a runnable procedure you start with `/<skill-name>` (e.g., `/validate`, `/ship`). It links to instruction files, templates, and scripts, forcing the AI to use real, deterministic logic before generating anything.
+- **Know-how** — reference knowledge the agent pulls in by itself when it detects a matching task, with no command typed.
+
+> **Prompts are retired.** `.github/prompts/` does not exist and must never be recreated. A skill is invoked exactly like a prompt — `/name` — and is **also** auto-matched by its `description`, so it fires without anyone remembering the command name. **Several skills can be combined in one chat window**, and the agent loads them dynamically as the work requires. Copilot indexes skills far better than prompt files, and the latest Visual Studio applications no longer support prompt files at all. The structure validator fails the build (`prompt-file-retired`) on any `*.prompt.*` file or anything under `.github/prompts/`.
 
 ### Hooks
 
@@ -172,36 +178,36 @@ Templates live in `.github/templates/` and mirror the project structure. Each in
 ### How They Connect
 
 ```
-Agent ──uses──► Skill (auto-invoked for matching tasks)
-  │
-  └──uses──► Prompt ──references──► Instruction ──references──► Template
-               │                        │                          │
-               │                        │                          └─ Structural skeleton
-               │                        └─ Domain rules, checklists, quality gates
-               └─ Entry point (slash command the user invokes)
+Agent ──uses──► Skill ──references──► Instruction ──references──► Template
+                  │                        │                          │
+                  │                        │                          └─ Structural skeleton
+                  │                        └─ Domain rules, checklists, quality gates
+                  └─ Entry point: /name, or auto-matched by its description
 ```
 
-When you invoke a prompt:
-1. The prompt tells the AI what to do and links to the instruction file.
+When a skill runs:
+1. The skill tells the AI what to do and links to the instruction file.
 2. The instruction file defines rules, quality checks, and links to the template.
 3. The AI reads the template, fills it in following the rules, and calls any scripts for deterministic logic.
 
 ### Folder Mirroring
 
-Both `instructions/` and `prompts/` mirror the project folder structure:
+Both `instructions/` and `templates/` mirror the project folder structure:
 
 ```
-Project folder   →  Instructions location                  →  Prompts location
-toolkit/email/   →  .github/instructions/toolkit/email/    →  .github/prompts/toolkit/email/
-toolkit/word/    →  .github/instructions/toolkit/word/     →  .github/prompts/toolkit/word/
+Project folder   →  Instructions location                  →  Templates location
+toolkit/email/   →  .github/instructions/toolkit/email/    →  .github/templates/toolkit/email/
+toolkit/word/    →  .github/instructions/toolkit/word/     →  .github/templates/toolkit/word/
 ```
+
+Skills do **not** mirror the tree. Every skill sits flat at `.github/skills/<name>/SKILL.md`, and its kebab-case name encodes the mirrored path instead — `toolkit/email/` plus the action `create` becomes `toolkit-email-create`.
 
 ### Naming Conventions
 
 | Type | Pattern | Example |
 |------|---------|---------|
 | Instruction | `{path.to.folder}.instructions.md` | `toolkit.email.instructions.md` |
-| Prompt | `{path.to.folder}.{action}.prompt.md` | `toolkit.email.create.prompt.md` |
+| Skill | `{path-to-folder}-{action}/SKILL.md` (flat) | `toolkit-email-create/SKILL.md` |
 | Template | `{path.to.folder}.template.{ext}` | `toolkit.email.template.eml` |
 
 ### Adding New Domains
@@ -209,7 +215,7 @@ toolkit/word/    →  .github/instructions/toolkit/word/     →  .github/prompt
 1. Create a subdirectory in `instructions/` matching the project folder.
 2. Create an `.instructions.md` file with the correct `applyTo` frontmatter.
 3. Create a template in `templates/` if the domain produces structured content.
-4. Create a prompt in `prompts/` if users need a slash command entry point.
+4. Create a skill in `skills/` if users need a slash command entry point or reusable know-how.
 
 See the [`github-conventions`](skills/github-conventions/SKILL.md) skill for the full decision matrix and naming rules.
 
@@ -226,22 +232,21 @@ See the [`github-conventions`](skills/github-conventions/SKILL.md) skill for the
 │   ├── github/                 # How to author .github/ customization files
 │   ├── organization/           # Rules for the organization example
 │   └── toolkit/                # Rules for the toolkit examples
-├── prompts/                    # Layer 3 — slash commands
-│   ├── pages.prompt.md             # Start local Jekyll server
-│   ├── ship.prompt.md              # Submit changes via PR
-│   ├── validate.prompt.md          # Run all CI checks locally
-│   ├── fix-corrupted-file.prompt.md
-│   ├── fix-cr.prompt.md            # Resolve review comments + CI failures
-│   ├── fix-cr-autopilot.prompt.md  # Loop until the CR is clean
-│   └── toolkit/                    # Slash commands for the toolkit examples
-├── agents/                     # Layer 4 — custom agent modes
+├── agents/                     # Layer 3 — custom agent modes
 │   ├── general.agent.md            # General-purpose, workspace-aware
 │   └── toolkit.agent.md            # Office Document Producer (toolkit)
-├── skills/                     # Layer 5 — reusable domain knowledge
-│   ├── github/                     # GitHub CLI and API patterns
-│   ├── github-conventions/         # How to choose and name .github/ files
-│   ├── office-documents/           # Brand system + Office spec schemas
-│   └── sharepoint-upload/          # Upload files to any SharePoint folder
+├── skills/                     # Layer 4 — /commands and reusable know-how
+│   ├── pages/SKILL.md              # Start local Jekyll server
+│   ├── ship/SKILL.md               # Submit changes via PR
+│   ├── validate/SKILL.md           # Run all CI checks locally
+│   ├── fix-corrupted-file/SKILL.md # Repair encoding damage
+│   ├── fix-cr/SKILL.md             # Resolve review comments + CI failures
+│   ├── fix-cr-autopilot/SKILL.md   # Loop until the CR is clean
+│   ├── github/SKILL.md             # GitHub CLI and API patterns
+│   ├── github-conventions/SKILL.md # How to choose and name .github/ files
+│   ├── office-documents/SKILL.md   # Brand system + Office spec schemas
+│   ├── sharepoint-upload/SKILL.md  # Upload files to any SharePoint folder
+│   └── toolkit-*/SKILL.md          # Commands for the toolkit examples
 ├── templates/                  # Structural skeletons
 │   ├── organization/               # Person page skeleton
 │   └── toolkit/

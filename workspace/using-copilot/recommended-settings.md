@@ -19,7 +19,7 @@ VS Code has **two** layers of settings. It helps to know which is which.
 
 | Layer | Where it lives | Who sets it |
 |-------|----------------|-------------|
-| **Workspace settings** | `.vscode/settings.json` **inside this repo** | Already shipped. Everyone who opens the repo gets them automatically (prompt, instruction, agent, and skill locations, etc.). **You do not touch these.** |
+| **Workspace settings** | `.vscode/settings.json` **inside this repo** | Already shipped. Everyone who opens the repo gets them automatically (instruction, skill, agent, and hook locations, etc.). **You do not touch these.** |
 | **Personal settings** | Your **User** `settings.json` on **your machine** | **You** set these. They follow you across every project. The repo cannot set them for you. |
 
 This page is about the **personal** layer — a few settings that make Copilot much nicer to use, set once per machine.

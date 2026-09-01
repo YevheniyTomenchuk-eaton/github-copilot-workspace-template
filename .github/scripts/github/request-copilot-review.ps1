@@ -3,7 +3,7 @@
 Request a Copilot re-review on a pull request and confirm Copilot is now a pending reviewer.
 
 .DESCRIPTION
-Requests review from copilot-pull-request-reviewer[bot] (the ONLY identifier that works for requesting —
+Requests review from copilot-pull-request-reviewer[bot] (the ONLY identifier that works for requesting -
 "Copilot" silently returns HTTP 200 with an empty reviewer list), then reads back the pending reviewers
 to confirm Copilot was actually added.
 
@@ -21,14 +21,11 @@ COPILOT_REQUESTED=<true|false>   (true = Copilot is a pending reviewer; throws o
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Owner,
+    [string]$Owner = $(throw 'Required parameter -Owner was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [string]$Repo,
+    [string]$Repo = $(throw 'Required parameter -Repo was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [int]$Pr
+    [int]$Pr = $(throw 'Required parameter -Pr was not provided.')
 )
 
 $ErrorActionPreference = 'Stop'
@@ -36,7 +33,7 @@ $ErrorActionPreference = 'Stop'
 # The POST response is authoritative: it returns the PR with the resulting requested_reviewers
 # list. Checking it directly avoids the race where a separate read-back misses Copilot because it
 # already moved from "requested" to actively reviewing. Match with a wildcard: the request login is
-# 'copilot-pull-request-reviewer[bot]' but the API returns the reviewer as 'Copilot' — an exact-login
+# 'copilot-pull-request-reviewer[bot]' but the API returns the reviewer as 'Copilot' - an exact-login
 # check fails. A wrong identifier silently returns HTTP 200 with an empty reviewer list, so an empty
 # match here is the genuine failure signal.
 $postRaw = gh api "repos/$Owner/$Repo/pulls/$Pr/requested_reviewers" -X POST -f 'reviewers[]=copilot-pull-request-reviewer[bot]' 2>&1

@@ -64,21 +64,21 @@ Templates keep every result **consistent** *and* **save tokens** — the AI fill
 
 Got a workflow, rule, or piece of know-how that worked well? Ask the AI to **capture it**:
 
-- *"Turn this into a prompt"* → reusable `/command`
+- *"Turn this into a skill"* → reusable `/command`
 - *"Save these as an instruction"* → auto-applied rules
-- *"Make a skill out of this"* → on-demand know-how
+- *"Make a skill out of this"* → on-demand know-how the AI pulls in by itself
 
 Next time, it just works — you don't re-explain it. (See [Customization files](customization-files.md).)
 
 ---
 
-## 🔎 6. Name prompts after their folder
+## 🔎 6. Name skills area-first, in kebab-case
 
-You don't have to **memorize** prompt names. When you run a `/` command, you can see the folder it lives in — so if a prompt is **named after its folder**, it's easy to find.
+You don't have to **memorize** command names. Every skill in this repo is named in **kebab-case**, **area first and action last** — so typing `/` plus a few letters narrows the list to exactly the family you want.
 
-That's why our prompts use dotted, path-shaped names like `toolkit.dev.implement` or `gaps.create` — the name *is* the location. Browse the folder, and every available prompt is right there, self-labelled.
+That's why our skills are called things like `toolkit-email-create` and `toolkit-word-upload` — the name *is* the location plus the job. Type `/toolkit` and every toolkit command is right there, self-labelled.
 
-> 🏷️ When you save a new prompt, name it after where it lives. Future-you will find it instantly.
+> 🏷️ When you save a new skill, name it the same way: `area-thing-action`, all lowercase, hyphens between words. Future-you will find it instantly.
 
 ---
 
@@ -86,7 +86,7 @@ That's why our prompts use dotted, path-shaped names like `toolkit.dev.implement
 
 Find the **balance** — a smart model writes the recipe, a cheaper one cooks from it:
 
-- **Building new stuff / deep research / writing prompts & scripts** → the flagship (Opus 4.8). Do the thinking once, do it right.
+- **Building new stuff / deep research / writing skills & scripts** → the flagship (Opus 4.8). Do the thinking once, do it right.
 - **Repeating a setup that is already built** → **Auto** is fine — the hard thinking is baked in.
 - **Simple, light work** (short email, move a file, find something) → **Auto**, or a cheap fast model (Flash, mini).
 

@@ -9,7 +9,7 @@ nav_order: 1
 
 | ← Previous | Next → |
 |:---|---:|
-| [Customization files](../customization-files.md) | [Prompts](prompts.md) |
+| [Customization files](../customization-files.md) | [Prompts (retired)](prompts.md) |
 
 ---
 
@@ -81,12 +81,12 @@ Instruction files live in `.github/instructions/`, mirroring the repository. The
 
 | Use an instruction when… | Use something else when… |
 |--------------------------|--------------------------|
-| The rule should apply **every time**, silently | You want to **run** a job on demand → [Prompt](prompts.md) |
-| It is a **convention** for a folder or file type | It is **deep know-how** for one task → [Skill](skills.md) |
+| The rule should apply **every time**, silently | You want to **run** a job on demand → [Skill](skills.md) |
+| It is a **convention** for a folder or file type | It is **deep know-how** pulled in only when the task matches → [Skill](skills.md) |
 | You want it **ambient**, never "called" | It is **executable logic** → [Script](scripts.md) |
 
 ---
 
 | ← Previous | Next → |
 |:---|---:|
-| [Customization files](../customization-files.md) | [Prompts](prompts.md) |
+| [Customization files](../customization-files.md) | [Prompts (retired)](prompts.md) |

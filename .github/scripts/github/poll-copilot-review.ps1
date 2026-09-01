@@ -29,7 +29,7 @@ Maximum minutes to poll. Default 10.
 
 .PARAMETER Quiet
 Suppress the per-iteration WAITING and transient NETWORK_ERROR lines, emitting only the single
-terminal sentinel. Use this when the caller blocks on the script with run_in_terminal mode=sync —
+terminal sentinel. Use this when the caller blocks on the script with run_in_terminal mode=sync -
 it keeps the returned output to one line so no progress chatter is fed back into the model's context.
 
 .OUTPUTS
@@ -38,17 +38,13 @@ COPILOT_DONE: ... | COPILOT_SILENT: ... | COPILOT_TIMEOUT: ...
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$Owner,
+    [string]$Owner = $(throw 'Required parameter -Owner was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [string]$Repo,
+    [string]$Repo = $(throw 'Required parameter -Repo was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [int]$Pr,
+    [int]$Pr = $(throw 'Required parameter -Pr was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [int]$ReviewCountBefore,
+    [int]$ReviewCountBefore = $(throw 'Required parameter -ReviewCountBefore was not provided.'),
 
     [int]$TimeoutMinutes = 10,
 

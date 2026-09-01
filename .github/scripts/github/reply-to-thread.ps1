@@ -7,7 +7,7 @@ Reads the reply body from a UTF-8 file, builds the full GraphQL payload (query +
 JSON object, and posts it via `gh api graphql --input`. This is the ONLY reliable way to post markdown
 bodies that contain backticks, em-dashes, or other characters that PowerShell mangles in inline strings.
 
-The mutation is NOT idempotent. If this script throws after a partial run, do NOT blindly re-run it —
+The mutation is NOT idempotent. If this script throws after a partial run, do NOT blindly re-run it -
 re-fetch the thread (see fetch-review-threads.ps1) and check whether your reply already posted.
 
 .PARAMETER ThreadId
@@ -22,11 +22,9 @@ COMMENT_ID=<node id>   on success (throws on failure).
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$ThreadId,
+    [string]$ThreadId = $(throw 'Required parameter -ThreadId was not provided.'),
 
-    [Parameter(Mandatory = $true)]
-    [string]$BodyPath
+    [string]$BodyPath = $(throw 'Required parameter -BodyPath was not provided.')
 )
 
 $ErrorActionPreference = 'Stop'

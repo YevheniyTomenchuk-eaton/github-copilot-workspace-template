@@ -4,7 +4,7 @@ Resolve (or un-resolve) a GitHub pull-request review thread.
 
 .DESCRIPTION
 Runs the resolveReviewThread / unresolveReviewThread GraphQL mutation. These mutations toggle state,
-so they are effectively non-idempotent for un-resolve — never re-run blindly to "check" the result;
+so they are effectively non-idempotent for un-resolve - never re-run blindly to "check" the result;
 re-fetch the thread (fetch-review-threads.ps1) instead.
 
 Always run this AFTER posting the reply (reply-to-thread.ps1), as a separate step.
@@ -20,8 +20,7 @@ IS_RESOLVED=<true|false>   (throws on failure).
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [string]$ThreadId,
+    [string]$ThreadId = $(throw 'Required parameter -ThreadId was not provided.'),
 
     [switch]$Unresolve
 )

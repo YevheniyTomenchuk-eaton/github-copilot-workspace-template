@@ -20,7 +20,7 @@ Every artifact you create must follow these rules:
 - **No history commentary.** Never write "this was changed from…" or "previously…"
 
 Bad: "It would be beneficial to consider implementing a comprehensive solution for the document generation."
-Good: "Add a prompt that builds the document."
+Good: "Add a skill that builds the document."
 
 ## Linking Rules
 
@@ -39,13 +39,13 @@ Good: "Add a prompt that builds the document."
 
 ## Toolkit Anatomy
 
-Every toolkit category is registered in **seven** places. Missing any one of them breaks the toolkit (404 on Pages, prompts not discovered, generated files committed by accident, sidebar broken). When you add or rename a toolkit, walk through all seven.
+Every toolkit category is registered in **seven** places. Missing any one of them breaks the toolkit (404 on Pages, skills not discovered, generated files committed by accident, sidebar broken). When you add or rename a toolkit, walk through all seven.
 
 ### 1. Published page — `toolkit/{category}/README.md`
 
 The only file tracked in git for the category — and the only one published to Pages. Copy [`toolkit.category-readme.template.md`](../../templates/toolkit/toolkit.category-readme.template.md) as the starting point and fill in the placeholders.
 
-The template's shape is fixed: a one-paragraph purpose, a **Prompts** table (one row per action, including the optional `upload` action), an optional category-specific reference table, then **Sources**, **Outputs**, and **Folder layout**. Drop the `Generator script` and `Upload script` rows only when the category truly has neither.
+The template's shape is fixed: a one-paragraph purpose, a **Skills** table (one row per action, including the optional `upload` action), an optional category-specific reference table, then **Sources**, **Outputs**, and **Folder layout**. Drop the `Generator script` and `Upload script` rows only when the category truly has neither.
 
 ### 2. Hub registration — `toolkit/README.md`
 
@@ -59,22 +59,22 @@ Add a row to the `## 📂 Categories` table. The link target is `{category}/READ
 
 `applyTo: "toolkit/{category}/**"`. Contains the rules specific to the category (format, naming, output layout, edge cases). Keep it short — defer general rules to this file.
 
-### 4. Prompts — `.github/prompts/toolkit/{category}/toolkit.{category}.{action}.prompt.md`
+### 4. Skills — `.github/skills/toolkit-{category}-{action}/SKILL.md`
 
-One file per action. Frontmatter:
+One skill folder per action, run as `/toolkit-{category}-{action}`. Skills sit **flat** under `.github/skills/` — the kebab-case folder name encodes the mirrored path, so there is no `toolkit/` subfolder. Frontmatter:
 
 ```yaml
 ---
-description: "{One-line trigger summary}"
-agent: agent
+name: toolkit-{category}-{action}
+description: "{What it does, and WHEN to use it — this text is the auto-invocation trigger}"
 ---
 ```
 
-Body must include: Task, Context Loading (numbered file reads — always include `toolkit.instructions.md` and the category instructions), Action steps, User Input + Example.
+`name` must match the folder name exactly. Body must include: Task, Context Loading (numbered file reads — always include `toolkit.instructions.md` and the category instructions), Action steps, User Input + Example.
 
 ### 5. Templates — `.github/templates/toolkit/{category}/` (only if needed)
 
-Static skeletons the prompt copies. File name follows the dot-prefix rule: `toolkit.{category}.{descriptor}.template.{ext}`. The word `template` appears **exactly once**, as the suffix.
+Static skeletons the skill copies. File name follows the dot-prefix rule: `toolkit.{category}.{descriptor}.template.{ext}`. The word `template` appears **exactly once**, as the suffix.
 
 ### 6. Git tracking — `.gitignore`
 
@@ -107,5 +107,5 @@ Add one `*.{ext}` line per output extension the toolkit produces. Avoid brace-st
 - **Sidebar parent must match exactly.** `parent: "Toolkit"` matches the `title` of `toolkit/README.md`. Typos break the sidebar silently.
 - **Don't link to bare folders.** Always `folder/README.md`, never `folder/` and never `(.)` — kramdown emits a broken anchor.
 - **One published file per category.** Never commit anything else under `toolkit/{category}/`.
-- **Prompt naming.** Dot-prefix encodes the full path under `prompts/`: `toolkit.{category}.{action}.prompt.md`. No abbreviations, no skipped segments.
-- **Custom agents.** If the toolkit needs an agent that does not exist, add it under `.github/agents/{name}.agent.md` and reference it in the prompt frontmatter (`agent: {name}`) and in the README.
+- **Skill naming.** Lowercase kebab-case, flat under `.github/skills/`: `toolkit-{category}-{action}/SKILL.md`. The name encodes the mirrored path with `-` instead of `/` — no abbreviations, no skipped segments, and never a nested `toolkit/` folder. Prompts are retired; never create a `*.prompt.md` file.
+- **Custom agents.** If the toolkit needs an agent that does not exist, add it under `.github/agents/{name}.agent.md` and reference it in the category README and in the skills that rely on it.

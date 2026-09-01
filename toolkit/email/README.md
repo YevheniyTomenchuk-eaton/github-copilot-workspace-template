@@ -7,13 +7,13 @@ parent: "Toolkit"
 
 Generate an on-brand email draft as an `.eml` file. Double-click the result and it opens in Outlook as an editable draft with a **Send** button — brand header band, clean typography, and a styled signature divider already in place.
 
-This category needs **no script** — the prompt fills an HTML template directly, so there is nothing to upload to SharePoint.
+This category needs **no script** — the skill fills an HTML template directly, so there is nothing to upload to SharePoint.
 
-## Prompts
+## Skills
 
-| Prompt | What it does |
-|--------|--------------|
-| `toolkit.email.create` | Gather recipients, subject, and message, look up your git identity as the sender, and write the `.eml` |
+| Skill | What it does |
+|-------|--------------|
+| `/toolkit-email-create` | Gather recipients, subject, and message, look up your git identity as the sender, and write the `.eml` |
 
 ## Sources
 

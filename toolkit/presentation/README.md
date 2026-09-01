@@ -7,12 +7,12 @@ parent: "Toolkit"
 
 Generate an on-brand PowerPoint deck, then upload it to SharePoint. The output is a 16:9 widescreen `.pptx` with a branded title slide, section dividers, content layouts, and slide-number footers.
 
-## Prompts
+## Skills
 
-| Prompt | What it does |
-|--------|--------------|
-| `toolkit.presentation.create` | Turn a topic into a JSON spec and build the styled `.pptx` |
-| `toolkit.presentation.upload` | Upload the generated `.pptx` to a SharePoint folder you choose |
+| Skill | What it does |
+|-------|--------------|
+| `/toolkit-presentation-create` | Turn a topic into a JSON spec and build the styled `.pptx` |
+| `/toolkit-presentation-upload` | Upload the generated `.pptx` to a SharePoint folder you choose |
 
 ## Slide layouts
 

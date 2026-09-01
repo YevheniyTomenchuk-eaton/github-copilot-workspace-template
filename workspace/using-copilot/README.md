@@ -24,7 +24,7 @@ Each page is small, has screenshots, and uses simple words. Read top to bottom, 
 | 4 | [Thinking and context](thinking-and-context.md) | Reasoning effort + memory size |
 | 5 | [Context and commands](context-and-commands.md) | `#` to add files, `/` to run commands |
 | 6 | [Permissions and autopilot](permissions-and-autopilot.md) | Approvals, bypass, autopilot, where it runs |
-| 7 | [Customization files](customization-files.md) | How instructions, prompts, skills, agents work |
+| 7 | [Customization files](customization-files.md) | How instructions, skills, agents work |
 | 8 | [Running and monitoring](running-and-monitoring.md) | Steer it, watch usage, never stop early |
 | 9 | [Recommended settings](recommended-settings.md) | One file you can import |
 | 10 | [Tips and tricks](tips-and-tricks.md) | Small habits that save time and tokens |

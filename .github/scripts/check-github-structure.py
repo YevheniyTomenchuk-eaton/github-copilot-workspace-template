@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 """Validate .github/ folder structure against project conventions.
 
-Checks that instruction, prompt, template, and hook files follow the naming
+Checks that instruction, skill, template, and hook files follow the naming
 conventions and mirror the main project folder structure.
 
 Checks performed:
   - instruction-filename-mismatch : stem doesn't match directory path
   - instruction-missing-applyto   : missing applyTo frontmatter
-  - prompt-filename-mismatch      : stem doesn't match directory path
-  - prompt-missing-description    : missing description frontmatter
-  - prompt-obsolete-mode-key      : uses the obsolete 'mode:' key — replace
-                                    with 'agent:' (e.g. agent: agent)
+  - prompt-file-retired           : a prompt artifact was reintroduced —
+                                    prompts are retired, use a skill instead
   - template-filename-mismatch    : prefix doesn't match directory path
   - hook-filename-mismatch        : hook stem doesn't match directory path
   - hook-missing-hooks-key        : hook JSON missing top-level 'hooks' object
@@ -62,9 +60,16 @@ import sys
 # ---------------------------------------------------------------------------
 
 # The mirrored sub-trees inside .github/ whose subfolders must map 1:1 to a
-# project folder (instructions, prompts, templates, and hooks all mirror the
-# location of the thing they govern).
-MIRROR_TYPES = ("instructions", "prompts", "templates", "hooks")
+# project folder (instructions, templates, and hooks all mirror the location of
+# the thing they govern).
+MIRROR_TYPES = ("instructions", "templates", "hooks")
+
+# Prompts are retired: every /command is a skill under .github/skills/.
+PROMPT_RETIRED_DETAIL = (
+    "Prompts are retired — this repository has standardized on skills. "
+    "Create .github/skills/<name>/SKILL.md instead (invoked as /<name> exactly "
+    "like a prompt). See the github-conventions skill."
+)
 
 # Event names recognised by VS Code's agent hooks (Preview). A committed hook
 # JSON keys its command arrays by these event names. VS Code accepts both its
@@ -480,117 +485,33 @@ def check_instructions(repo_root: str, delta_files: set[str] | None = None,
     return errors
 
 
-def check_prompts(repo_root: str, delta_files: set[str] | None = None,
-                  project_dirs: set[str] | None = None) -> list[tuple[str, str, str]]:
-    """Validate prompt files. Returns list of (file, error_type, detail).
+def check_prompts_retired(repo_root: str) -> list[tuple[str, str, str]]:
+    """Fail on any reintroduced prompt artifact under .github/.
 
-    If *delta_files* is given, only files whose repo-relative path is in the
-    set are checked (delta mode).
+    Flags every file under `.github/prompts/` and every `*.prompt.*` file
+    anywhere under `.github/` (templates included).
+
+    Deliberately ignores *delta_files*: the ban is a property of the tree, not
+    of the changed set, so it is enforced identically on delta and full scans.
     """
-    if project_dirs is None:
-        project_dirs = set()
     errors: list[tuple[str, str, str]] = []
-    base = os.path.join(repo_root, ".github", "prompts")
+    github_dir = os.path.join(repo_root, ".github")
+    if not os.path.isdir(github_dir):
+        return errors
 
-    for rel_path in collect_files(base, ".prompt.md"):
-        rel_norm = rel_path.replace(os.sep, "/")
-        if delta_files is not None and f".github/prompts/{rel_norm}" not in delta_files:
-            continue
-        full_path = os.path.join(base, rel_path)
-        fname = os.path.basename(rel_path)
-        rel_dir = os.path.dirname(rel_path)
-
-        # Check: suffix keyword appears only once (at the end)
-        if fname.count(".prompt.") > 1:
-            errors.append((
-                f".github/prompts/{rel_norm}",
-                "duplicate-suffix",
-                f"'.prompt.' appears {fname.count('.prompt.')} "
-                f"times in '{fname}' — must appear only once (as the suffix)"
-            ))
-
-        # Check: description frontmatter
-        fm = parse_frontmatter(full_path)
-        if "description" not in fm:
-            errors.append((
-                f".github/prompts/{rel_norm}",
-                "prompt-missing-description",
-                "Missing 'description' in YAML front matter"
-            ))
-
-        # Check: obsolete 'mode:' key (renamed to 'agent:')
-        if "mode" in fm:
-            errors.append((
-                f".github/prompts/{rel_norm}",
-                "prompt-obsolete-mode-key",
-                "Uses obsolete 'mode:' key — replace with 'agent:' "
-                "(e.g. 'agent: agent')"
-            ))
-
-        # Check: kebab-case
-        stem = fname.removesuffix(".prompt.md")
-        if not _is_kebab_case(stem):
-            errors.append((
-                f".github/prompts/{rel_norm}",
-                "not-kebab-case",
-                f"Stem '{stem}' is not lowercase kebab-case with dots"
-            ))
-
-        # Check: no consecutive duplicate segments (e.g. diagram.diagram)
-        segs = stem.split(".")
-        for i in range(len(segs) - 1):
-            if segs[i] == segs[i + 1]:
-                errors.append((
-                    f".github/prompts/{rel_norm}",
-                    "consecutive-duplicate-segment",
-                    f"Stem '{stem}' has consecutive duplicate segment "
-                    f"'{segs[i]}' at positions {i} and {i + 1}"
-                ))
-                break  # report first occurrence only
-
-        # Check: stem should not contain "prompt" as a dot-segment
-        # (deduplication rule — keyword should only appear in the suffix)
-        stem_segments = stem.split(".")
-        if "prompt" in stem_segments:
-            errors.append((
-                f".github/prompts/{rel_norm}",
-                "stem-contains-suffix-keyword",
-                f"Stem '{stem}' contains 'prompt' as a segment — "
-                f"the suffix keyword should only appear once (in '.prompt.md')"
-            ))
-
-        # Check: stem must encode exactly the directory path + action
-        # Pattern: {dir-path-as-dots}.{action}.prompt.md
-        # Root-level prompts (dir == "") can have any descriptive name
-        if not rel_dir:
-            continue
-
-        eff_stem = _effective_dir_stem(rel_dir, "prompt")
-        _check_stem_depth(
-            errors,
-            f".github/prompts/{rel_norm}",
-            stem, eff_stem, rel_dir, base,
-            "prompts", project_dirs,
-            "prompt-filename-mismatch",
-            last_segment_is_action=True,
+    for dirpath, _dirnames, filenames in os.walk(github_dir):
+        rel_dir = os.path.relpath(dirpath, repo_root).replace(os.sep, "/")
+        in_prompts_dir = (
+            rel_dir == ".github/prompts" or rel_dir.startswith(".github/prompts/")
         )
-
-    # Check for non-prompt .md files in prompts/
-    for rel_path in collect_all_files(base):
-        rel_norm = rel_path.replace(os.sep, "/")
-        if delta_files is not None and f".github/prompts/{rel_norm}" not in delta_files:
-            continue
-        fname = os.path.basename(rel_path)
-        if fname.endswith(".prompt.md"):
-            continue
-        if not fname.endswith(".md"):
-            continue
-        errors.append((
-            f".github/prompts/{rel_norm}",
-            "wrong-suffix",
-            f"Markdown file in prompts/ should end with "
-            f"'.prompt.md', got '{fname}'"
-        ))
+        for fname in sorted(filenames):
+            if not in_prompts_dir and ".prompt." not in fname:
+                continue
+            errors.append((
+                f"{rel_dir}/{fname}",
+                "prompt-file-retired",
+                PROMPT_RETIRED_DETAIL,
+            ))
 
     return errors
 
@@ -852,9 +773,8 @@ def check_misplaced_files(repo_root: str, delta_files: set[str] | None = None) -
             elif fname.endswith(".prompt.md"):
                 errors.append((
                     rel_file,
-                    "misplaced-file",
-                    f"Prompt file found outside .github/ — "
-                    f"move to .github/prompts/"
+                    "prompt-file-retired",
+                    PROMPT_RETIRED_DETAIL,
                 ))
             elif template_re.search(fname):
                 errors.append((
@@ -1005,7 +925,7 @@ def check_leading_fence(repo_root: str, delta_files: set[str] | None = None) -> 
     push-to-main full scan guards against any wrapper reappearing.
     """
     errors: list[tuple[str, str, str]] = []
-    for mirror_type in ("instructions", "prompts", "agents", "skills"):
+    for mirror_type in ("instructions", "agents", "skills"):
         base = os.path.join(repo_root, ".github", mirror_type)
         if not os.path.isdir(base):
             continue
@@ -1244,7 +1164,7 @@ def main():
 
     all_errors: list[tuple[str, str, str]] = []
     all_errors.extend(check_instructions(repo_root, delta_files, project_dirs))
-    all_errors.extend(check_prompts(repo_root, delta_files, project_dirs))
+    all_errors.extend(check_prompts_retired(repo_root))
     all_errors.extend(check_templates(repo_root, delta_files, project_dirs))
     all_errors.extend(check_agents(repo_root, delta_files))
     all_errors.extend(check_skills(repo_root, delta_files))

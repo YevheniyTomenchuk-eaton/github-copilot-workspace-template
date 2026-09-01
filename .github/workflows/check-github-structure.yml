@@ -38,8 +38,9 @@ jobs:
               '.github/instructions/' '.github/prompts/' '.github/templates/' \
               '.github/agents/' '.github/skills/' \
               || true)
-            # Also pick up any misplaced files (instructions/prompt/template
-            # files outside .github/) that were added or modified in the PR.
+            # Also pick up any misplaced files (instruction/template files
+            # outside .github/) and any reintroduced prompt file — prompts are
+            # retired, so a *.prompt.md anywhere must fail the build.
             MISPLACED=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" \
               | grep -E '\.(instructions\.md|prompt\.md|template\.\w+)$' \
               | grep -v '^\.github/' || true)

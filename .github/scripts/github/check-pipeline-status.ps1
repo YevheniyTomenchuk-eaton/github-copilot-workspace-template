@@ -9,7 +9,7 @@ Only checks that have actually completed with a failing conclusion are surfaced 
 with the originating workflow run id so the caller can pull the failed log and classify the cause.
 
 This lets the fix-cr / autopilot prompts proceed past a pipeline that is merely still running and act
-only on genuine red checks — a running pipeline must never block the loop.
+only on genuine red checks - a running pipeline must never block the loop.
 
 .PARAMETER Pr
 Pull request number.
@@ -31,8 +31,7 @@ PIPELINE_STATUS semantics:
 #>
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory = $true)]
-    [int]$Pr,
+    [int]$Pr = $(throw 'Required parameter -Pr was not provided.'),
 
     [string]$Repo
 )

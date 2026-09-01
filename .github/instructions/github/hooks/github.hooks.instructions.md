@@ -30,8 +30,8 @@ both casings — consult the linked VS Code docs for the set your build supports
     "PostToolUse": [
       {
         "type": "command",
-        "command": "powershell -ExecutionPolicy Bypass -File .github/scripts/<domain>/<name>.ps1",
-        "windows": "powershell -ExecutionPolicy Bypass -File .github\\scripts\\<domain>\\<name>.ps1"
+        "command": "powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .github/scripts/<domain>/<name>.ps1",
+        "windows": "powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .github\\scripts\\<domain>\\<name>.ps1"
       }
     ]
   }
@@ -64,8 +64,8 @@ staying in the zero-config default location the hook loader always reads.
 
 - A hook backing a demo under `workspace/demo/` is named `workspace.demo.hooks-tour.json` and lives
   directly at `.github/hooks/workspace.demo.hooks-tour.json`. The dot-path encodes the mirrored
-  directory; the `.json` file sits flat. It pairs with the `workspace.demo.hooks-tour.prompt.md`
-  command. The leading-dot, kebab-case, and no-consecutive-duplicate-segment rules from
+  directory; the `.json` file sits flat. It pairs with the `/workspace-demo-hooks-tour` skill. The
+  leading-dot, kebab-case, and no-consecutive-duplicate-segment rules from
   `copilot-instructions.md` apply.
 - **Prefer this flat dot-name layout over mirrored subfolders.** VS Code's hook loader reads only the
   `*.json` files **directly in** a registered folder (no `**` recursion), so a mirrored subfolder
@@ -76,8 +76,8 @@ staying in the zero-config default location the hook loader always reads.
 
 ## Registration — Hooks Do NOT Auto-Discover Subfolders
 
-This is the one place hooks differ from prompts and instructions. VS Code's prompt/instruction
-loaders accept `**` globs and recurse; the **hook loader does not**. For a folder entry, VS Code
+This is the one place hooks differ from instructions. VS Code's instruction loader accepts `**`
+globs and recurses; the **hook loader does not**. For a folder entry, VS Code
 loads only the `*.json` files **directly in that folder** (single level). The default `.github/hooks`
 entry in `chat.hookFilesLocations` covers every flat dot-named hook — which is why the flat layout
 above is preferred and needs **no** extra registration. Only add another entry to

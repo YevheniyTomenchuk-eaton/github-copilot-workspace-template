@@ -7,12 +7,12 @@ parent: "Toolkit"
 
 Generate an on-brand Excel workbook, then upload it to SharePoint. The output is an `.xlsx` with a colored banner title, a frozen styled header, banded rows, number formatting, an auto-filter, and an optional totals row.
 
-## Prompts
+## Skills
 
-| Prompt | What it does |
-|--------|--------------|
-| `toolkit.excel.create` | Turn your data into a JSON spec and build the styled `.xlsx` |
-| `toolkit.excel.upload` | Upload the generated `.xlsx` to a SharePoint folder you choose |
+| Skill | What it does |
+|-------|--------------|
+| `/toolkit-excel-create` | Turn your data into a JSON spec and build the styled `.xlsx` |
+| `/toolkit-excel-upload` | Upload the generated `.xlsx` to a SharePoint folder you choose |
 
 ## Column formats
 

@@ -2,13 +2,12 @@
 """Ban inline scripts and file templates inside customization files.
 
 Enforces the **Script it or template it — never inline it** rule from
-.github/copilot-instructions.md for prompt, instruction, and agent files.
+.github/copilot-instructions.md for instruction and agent files.
 Reusable executable logic must live in .github/scripts/ and be *called*;
 repeated file skeletons must live in .github/templates/ and be *linked*.
 Only short illustrative examples may appear inline.
 
 Scope (skills are intentionally excluded — they are reference docs):
-  - .github/prompts/**
   - .github/instructions/**
   - .github/agents/**
 
@@ -45,7 +44,6 @@ from collections import defaultdict
 # ---------------------------------------------------------------------------
 
 SCOPE_DIRS = (
-    os.path.join(".github", "prompts"),
     os.path.join(".github", "instructions"),
     os.path.join(".github", "agents"),
 )
@@ -83,7 +81,7 @@ FENCE = re.compile(r"^(\s*)(`{3,}|~{3,})\s*([^\s`~]*)")
 LINE_THRESHOLD = 12
 
 # Structured-config languages whose fenced blocks may be a full file skeleton
-# (e.g. a hook JSON pasted into a prompt) and must be extracted to a script or
+# (e.g. a hook JSON pasted into an instruction) and must be extracted to a script or
 # template. Detection is prose-gated to avoid flagging the many short
 # illustrative frontmatter / config snippets that legitimately appear inline.
 CONFIG_LANGS = {"json", "jsonc", "json5", "yaml", "yml", "xml", "toml"}

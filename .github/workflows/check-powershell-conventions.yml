@@ -1,0 +1,106 @@
+name: Check PowerShell Conventions
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/scripts/**"
+      - ".github/instructions/**"
+      - ".github/agents/**"
+      - ".github/skills/**"
+      - ".github/hooks/**"
+      - ".github/workflows/check-powershell-conventions.yml"
+  workflow_dispatch:
+
+jobs:
+  check-powershell-conventions:
+    name: "PowerShell Convention Validation"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Smoke-test checker is runnable
+        run: |
+          python3 -m py_compile .github/scripts/check-powershell-conventions.py
+
+      - name: Detect changed files
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+            if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+              # No usable 'before' commit (first push to a branch, force-push,
+              # or shallow history). Fall back to the parent commit; if that is
+              # also unavailable, a delta diff would be empty and silently skip
+              # validation — run a full scan instead.
+              BASE="$(git rev-parse "$HEAD~1" 2>/dev/null || echo "")"
+              if [ -z "$BASE" ]; then
+                echo "No usable base commit — running full scan."
+                echo "scan_mode=full" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+            fi
+          else
+            echo "Manual dispatch — running full scan."
+            echo "scan_mode=full" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # A change to the enforcement mechanism itself (the checker or this
+          # workflow) can alter how ANY file is judged, so a delta scan of only
+          # the touched files is unsafe — run a full scan when either changes.
+          MECH=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- \
+            '.github/scripts/check-powershell-conventions.py' \
+            '.github/workflows/check-powershell-conventions.yml' || true)
+          if [ -n "$MECH" ]; then
+            echo "Enforcement mechanism changed — running full scan."
+            echo "scan_mode=full" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Delta-only enforcement: pre-existing debt is grandfathered; the
+          # checker guards new and modified files only.
+          FILES=$(git diff --name-only --diff-filter=ACMR "$BASE" "$HEAD" -- \
+            '.github/scripts/' '.github/instructions/' \
+            '.github/agents/' '.github/skills/' '.github/hooks/' \
+            | grep -E '\.(ps1|md|json)$' || true)
+
+          if [ -z "$FILES" ]; then
+            echo "No relevant files changed."
+            echo "scan_mode=none" >> "$GITHUB_OUTPUT"
+          else
+            COUNT=$(echo "$FILES" | wc -l)
+            echo "Delta scan — $COUNT changed file(s)."
+            echo "$FILES" > /tmp/changed_files.txt
+            echo "scan_mode=delta" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate (delta — PR / push)
+        if: steps.changed.outputs.scan_mode == 'delta'
+        env:
+          CI: "true"
+        run: |
+          python3 .github/scripts/check-powershell-conventions.py --stdin < /tmp/changed_files.txt
+
+      - name: Validate (full scan)
+        if: steps.changed.outputs.scan_mode == 'full'
+        env:
+          CI: "true"
+        run: |
+          python3 .github/scripts/check-powershell-conventions.py .
+
+      - name: No relevant changes
+        if: steps.changed.outputs.scan_mode == 'none'
+        run: echo "No PowerShell or customization files changed — nothing to validate."
