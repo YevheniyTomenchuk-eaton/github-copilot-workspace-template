@@ -1,11 +1,27 @@
 # GitHub helper scripts
 
-Reusable PowerShell scripts for GitHub PR review workflows. They encapsulate the pagination, charset,
-and idempotency rules that brittle inline `gh api graphql` snippets keep getting wrong. The
-[`github` skill](../../skills/github/SKILL.md) and the `/fix-cr` / `/fix-cr-autopilot` skills call these
-instead of reconstructing the mutations by hand.
+Reusable PowerShell scripts for GitHub PR review and shipping workflows. They encapsulate the
+pagination, charset, and idempotency rules that brittle inline `gh api graphql` snippets keep getting
+wrong. The [`github` skill](../../skills/github/SKILL.md) and the `/ship` / `/fix-cr` /
+`/fix-cr-autopilot` skills call these instead of reconstructing the sequences by hand.
 
 Run each via `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ".github/scripts/github/<script>.ps1" ...`.
+
+## Shipping
+
+`/ship` is script-driven: the preflight decides the single correct path, the others perform the
+mechanical git/gh steps. Every script takes `-Base <branch>` (default `main`) for repos that ship
+into something else.
+
+| Script | Purpose | Key output |
+|---|---|---|
+| `ship-preflight.ps1` | Read-only. Detect branch, dirtiness, PR state and submodule drift, then pick exactly one path | `ACTION` (`stop-no-changes` / `commit-push` / `commit-push-pr` / `branch-commit-push-pr` / `squash-recovery`), `BRANCH`, `PR_STATE`, `SUBMODULE_CHANGES`, `STOP_REASON` |
+| `commit-and-push.ps1` | Commit (optionally onto a new branch via `-NewBranch`) and push. Excludes submodule gitlink changes from the commit | `RESULT=pushed`, `BRANCH`, `SKIPPED_SUBMODULES`, `STOP_REASON` |
+| `rebase-onto-base.ps1` | Squash-merge recovery — move work onto a fresh branch cut from `origin/<base>` by cherry-pick, non-destructively | `RESULT=rebased` / `conflicts`, `NEW_BRANCH`, `DIFF_FILE_COUNT`, `CONFLICT_FILES`, `CHERRY_REMAINING` |
+| `create-pr.ps1` | Create the PR from a UTF-8 body file; idempotent — returns the existing open PR instead of a duplicate | `RESULT=created` / `already-exists`, `PR_URL` |
+| `invoke-git-command.ps1` | Shared Git wrapper. The only script allowed to capture Git with `2>&1` — Windows PowerShell 5.1 turns ordinary Git stderr progress into `NativeCommandError` | `ExitCode`, `Output` |
+
+## PR review
 
 | Script | Purpose | Key output |
 |---|---|---|
